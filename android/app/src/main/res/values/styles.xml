@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App base theme -->
+    <style name="Theme.MasterChat" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Core Colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        
+        <!-- Backgrounds -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="backgroundColor">@color/background</item>
+        
+        <!-- Status bar styling -->
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        
+        <!-- Material Components mappings -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MasterChat.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MasterChat.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MasterChat.Large</item>
+    </style>
+
+    <!-- Shape Definitions -->
+    <style name="ShapeAppearance.MasterChat.Small" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.MasterChat.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item> <!-- For Cards and Chat Bubbles -->
+    </style>
+
+    <style name="ShapeAppearance.MasterChat.Large" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32dp</item> <!-- For Pill buttons/inputs -->
+    </style>
+    
+    <!-- Custom text styles -->
+    <style name="TextAppearance.MasterChat.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

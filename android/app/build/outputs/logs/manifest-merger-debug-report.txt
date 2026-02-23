@@ -1,0 +1,581 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:2:1-34:12
+MERGED from [com.google.android.material:material:1.11.0] /home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/pratyut/.gradle/caches/9.2.1/transforms/ed01ff4bde4be391bd7acf64720c41ff/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7370c23ae58ac40c0572daf4c1fa8fdb/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a68ce2be50f30d8790f2b92f13d1c75a/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:17:1-145:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/a7588f039ce4e3e51fdc8b1d26ce19c9/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c1408eaf57cd68cc2c1fa9e7e908ea0b/transformed/viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pratyut/.gradle/caches/9.2.1/transforms/456da2b875a4b27f57b315bd3bf765cd/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.8.0] /home/pratyut/.gradle/caches/9.2.1/transforms/2d6d128facd8bcf568d3815d48548ecc/transformed/activity-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/b1b9a710e636cf154e8e92fe3a95b582/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0ae5e0ba73ee4951cc4437938a2623d3/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/705ab777f0a3cb391ef381b7b644a86d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1ddf126e1d4bd432961bb4b89f39972f/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5ec7665dfa356c0e81b9e05e6b8155a5/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/713b94aaf490f6fbae9be2484ed308d6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a61edc9f5c405b156b3147256b4bc887/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/87957b446af0dc4e2d253dbb76473922/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/47913b1ef742b6de1eb5fba0f3035f6b/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36b059a939445909a4b22f45fddd6e44/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ca0e0117877443e01db88e883bf18144/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5197424144d74536825e5b0e6125901e/transformed/core-ktx-1.9.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/736caa50c7c5be9c98ccc0ff25eae082/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/4eb1f19aa196aa32acecfa9bbfb59574/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f39b3818c3119c00d70bb787212203c3/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/cc93cfedf6d9e0c037ada26a92a213a5/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/442a383e07ed407fefe59d10e1ef229c/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/50abb4326c87b0ad4b70d418c0dd99aa/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/3c65340af3758f538b43a8fb64aa20b9/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/7b5d7bb51f5e647d23eb017eff669ee1/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.room:room-ktx:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7834bb2c9a6b5bd13f2017f8ebc6e556/transformed/room-ktx-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5c81de8c3f7d519d322f96adc9530001/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e610cadb024e57ce5bcb08c9922edd38/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/d4bdbfca21ad3e79d3c6ba9e446bc5d1/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f53f62dfaf34f7919ddb71525ab2e365/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/563a2ff6456903591463fd3a6d0a6c70/transformed/sqlite-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/5257290284fa707b4fef18b39cbad23e/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1e0966e8db127ef2590d5e299cbb81e0/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/98a6e4dc9910731b8c8e663129a6910c/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36ff27a0ed16d457f9d3289e41f3022c/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/bba73ee034e304d2f08db52014598666/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0107f5fecbd291dad01946c64abb6849/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e15eced0ad2a8423d904a880dce863c3/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:5:5-79
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:24:5-79
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:24:5-79
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:5:22-76
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:6:5-80
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:6:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:7:22-78
+uses-permission#android.permission.MANAGE_EXTERNAL_STORAGE
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:8:5-82
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:8:22-79
+application
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:10:5-33:19
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:10:5-33:19
+MERGED from [com.google.android.material:material:1.11.0] /home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.11.0] /home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/pratyut/.gradle/caches/9.2.1/transforms/ed01ff4bde4be391bd7acf64720c41ff/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/pratyut/.gradle/caches/9.2.1/transforms/ed01ff4bde4be391bd7acf64720c41ff/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:28:5-143:19
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:28:5-143:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/5257290284fa707b4fef18b39cbad23e/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/5257290284fa707b4fef18b39cbad23e/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:16:9-35
+	android:label
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:15:9-41
+	android:roundIcon
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:14:9-54
+	android:icon
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:13:9-43
+	android:allowBackup
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:12:9-35
+	android:theme
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:17:9-48
+	android:usesCleartextTraffic
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:18:9-44
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:11:9-40
+activity#com.masterapp.chat.ui.LoginActivity
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:21:9-28:20
+	android:exported
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:23:13-36
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:22:13-45
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:24:13-27:29
+action#android.intent.action.MAIN
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:25:17-69
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:25:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:26:17-77
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:26:27-74
+activity#com.masterapp.chat.ui.RegisterActivity
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:30:9-57
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:30:19-54
+activity#com.masterapp.chat.ui.ConversationListActivity
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:31:9-65
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:31:19-62
+activity#com.masterapp.chat.ui.ChatActivity
+ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:32:9-53
+	android:name
+		ADDED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml:32:19-50
+uses-sdk
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+MERGED from [com.google.android.material:material:1.11.0] /home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/pratyut/.gradle/caches/9.2.1/transforms/ed01ff4bde4be391bd7acf64720c41ff/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/pratyut/.gradle/caches/9.2.1/transforms/ed01ff4bde4be391bd7acf64720c41ff/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7370c23ae58ac40c0572daf4c1fa8fdb/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7370c23ae58ac40c0572daf4c1fa8fdb/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a68ce2be50f30d8790f2b92f13d1c75a/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a68ce2be50f30d8790f2b92f13d1c75a/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/a7588f039ce4e3e51fdc8b1d26ce19c9/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/a7588f039ce4e3e51fdc8b1d26ce19c9/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c1408eaf57cd68cc2c1fa9e7e908ea0b/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c1408eaf57cd68cc2c1fa9e7e908ea0b/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pratyut/.gradle/caches/9.2.1/transforms/456da2b875a4b27f57b315bd3bf765cd/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pratyut/.gradle/caches/9.2.1/transforms/456da2b875a4b27f57b315bd3bf765cd/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.8.0] /home/pratyut/.gradle/caches/9.2.1/transforms/2d6d128facd8bcf568d3815d48548ecc/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.0] /home/pratyut/.gradle/caches/9.2.1/transforms/2d6d128facd8bcf568d3815d48548ecc/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/b1b9a710e636cf154e8e92fe3a95b582/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/b1b9a710e636cf154e8e92fe3a95b582/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0ae5e0ba73ee4951cc4437938a2623d3/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0ae5e0ba73ee4951cc4437938a2623d3/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/705ab777f0a3cb391ef381b7b644a86d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/705ab777f0a3cb391ef381b7b644a86d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1ddf126e1d4bd432961bb4b89f39972f/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1ddf126e1d4bd432961bb4b89f39972f/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5ec7665dfa356c0e81b9e05e6b8155a5/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5ec7665dfa356c0e81b9e05e6b8155a5/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/713b94aaf490f6fbae9be2484ed308d6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/713b94aaf490f6fbae9be2484ed308d6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a61edc9f5c405b156b3147256b4bc887/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pratyut/.gradle/caches/9.2.1/transforms/a61edc9f5c405b156b3147256b4bc887/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/87957b446af0dc4e2d253dbb76473922/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/87957b446af0dc4e2d253dbb76473922/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/47913b1ef742b6de1eb5fba0f3035f6b/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/47913b1ef742b6de1eb5fba0f3035f6b/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36b059a939445909a4b22f45fddd6e44/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36b059a939445909a4b22f45fddd6e44/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ca0e0117877443e01db88e883bf18144/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ca0e0117877443e01db88e883bf18144/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5197424144d74536825e5b0e6125901e/transformed/core-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5197424144d74536825e5b0e6125901e/transformed/core-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/736caa50c7c5be9c98ccc0ff25eae082/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/736caa50c7c5be9c98ccc0ff25eae082/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/4eb1f19aa196aa32acecfa9bbfb59574/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/4eb1f19aa196aa32acecfa9bbfb59574/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f39b3818c3119c00d70bb787212203c3/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f39b3818c3119c00d70bb787212203c3/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/cc93cfedf6d9e0c037ada26a92a213a5/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/cc93cfedf6d9e0c037ada26a92a213a5/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/442a383e07ed407fefe59d10e1ef229c/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/pratyut/.gradle/caches/9.2.1/transforms/442a383e07ed407fefe59d10e1ef229c/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/50abb4326c87b0ad4b70d418c0dd99aa/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/50abb4326c87b0ad4b70d418c0dd99aa/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/3c65340af3758f538b43a8fb64aa20b9/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/3c65340af3758f538b43a8fb64aa20b9/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/7b5d7bb51f5e647d23eb017eff669ee1/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/7b5d7bb51f5e647d23eb017eff669ee1/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7834bb2c9a6b5bd13f2017f8ebc6e556/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/7834bb2c9a6b5bd13f2017f8ebc6e556/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5c81de8c3f7d519d322f96adc9530001/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/5c81de8c3f7d519d322f96adc9530001/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e610cadb024e57ce5bcb08c9922edd38/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e610cadb024e57ce5bcb08c9922edd38/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/d4bdbfca21ad3e79d3c6ba9e446bc5d1/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/d4bdbfca21ad3e79d3c6ba9e446bc5d1/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f53f62dfaf34f7919ddb71525ab2e365/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/f53f62dfaf34f7919ddb71525ab2e365/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/563a2ff6456903591463fd3a6d0a6c70/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/pratyut/.gradle/caches/9.2.1/transforms/563a2ff6456903591463fd3a6d0a6c70/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/5257290284fa707b4fef18b39cbad23e/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/5257290284fa707b4fef18b39cbad23e/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1e0966e8db127ef2590d5e299cbb81e0/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/1e0966e8db127ef2590d5e299cbb81e0/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/98a6e4dc9910731b8c8e663129a6910c/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/98a6e4dc9910731b8c8e663129a6910c/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36ff27a0ed16d457f9d3289e41f3022c/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/36ff27a0ed16d457f9d3289e41f3022c/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/bba73ee034e304d2f08db52014598666/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/bba73ee034e304d2f08db52014598666/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0107f5fecbd291dad01946c64abb6849/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/pratyut/.gradle/caches/9.2.1/transforms/0107f5fecbd291dad01946c64abb6849/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e15eced0ad2a8423d904a880dce863c3/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e15eced0ad2a8423d904a880dce863c3/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/pratyut/Desktop/master_app/android/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.WAKE_LOCK
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:5-68
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:23:22-65
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:25:5-81
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:25:22-78
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:5-77
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:26:22-74
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:29:9-37:20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pratyut/.gradle/caches/9.2.1/transforms/ceefd1dd2da916ab5c259559409d9cf3/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:33:13-31
+	android:authorities
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:31:13-68
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:32:13-37
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:30:13-67
+meta-data#androidx.work.WorkManagerInitializer
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:34:13-36:52
+	android:value
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:36:17-49
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:35:17-68
+service#androidx.work.impl.background.systemalarm.SystemAlarmService
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:39:9-45:35
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:42:13-72
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:43:13-37
+	tools:ignore
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:44:13-60
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:45:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:41:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:40:13-88
+service#androidx.work.impl.background.systemjob.SystemJobService
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:46:9-52:35
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:49:13-70
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:50:13-36
+	android:permission
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:51:13-69
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:52:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:48:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:47:13-84
+service#androidx.work.impl.foreground.SystemForegroundService
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:53:9-59:35
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:56:13-77
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:57:13-37
+	tools:ignore
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:58:13-60
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:59:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:55:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:54:13-81
+receiver#androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:61:9-66:35
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:64:13-35
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:65:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:66:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:63:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:62:13-88
+receiver#androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:67:9-77:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:70:13-36
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:71:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:72:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:69:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:68:13-106
+intent-filter#action:name:android.intent.action.ACTION_POWER_CONNECTED+action:name:android.intent.action.ACTION_POWER_DISCONNECTED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:73:13-76:29
+action#android.intent.action.ACTION_POWER_CONNECTED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:17-87
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:74:25-84
+action#android.intent.action.ACTION_POWER_DISCONNECTED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:17-90
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:75:25-87
+receiver#androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:78:9-88:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:81:13-36
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:82:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:83:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:80:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:79:13-104
+intent-filter#action:name:android.intent.action.BATTERY_LOW+action:name:android.intent.action.BATTERY_OKAY
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:84:13-87:29
+action#android.intent.action.BATTERY_OKAY
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:17-77
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:85:25-74
+action#android.intent.action.BATTERY_LOW
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:17-76
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:86:25-73
+receiver#androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:89:9-99:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:92:13-36
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:93:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:94:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:91:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:90:13-104
+intent-filter#action:name:android.intent.action.DEVICE_STORAGE_LOW+action:name:android.intent.action.DEVICE_STORAGE_OK
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:95:13-98:29
+action#android.intent.action.DEVICE_STORAGE_LOW
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:17-83
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:96:25-80
+action#android.intent.action.DEVICE_STORAGE_OK
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:17-82
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:97:25-79
+receiver#androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:100:9-109:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:103:13-36
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:104:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:105:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:102:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:101:13-103
+intent-filter#action:name:android.net.conn.CONNECTIVITY_CHANGE
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:106:13-108:29
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:17-79
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:107:25-76
+receiver#androidx.work.impl.background.systemalarm.RescheduleReceiver
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:110:9-121:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:113:13-36
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:114:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:115:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:112:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:111:13-88
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.TIMEZONE_CHANGED+action:name:android.intent.action.TIME_SET
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:116:13-120:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:17-79
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:117:25-76
+action#android.intent.action.TIME_SET
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:17-73
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:118:25-70
+action#android.intent.action.TIMEZONE_CHANGED
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:17-81
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:119:25-78
+receiver#androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:122:9-131:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:125:13-72
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:126:13-37
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:127:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:124:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:123:13-99
+intent-filter#action:name:androidx.work.impl.background.systemalarm.UpdateProxies
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:128:13-130:29
+action#androidx.work.impl.background.systemalarm.UpdateProxies
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:17-98
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:129:25-95
+receiver#androidx.work.impl.diagnostics.DiagnosticsReceiver
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:132:9-142:20
+	android:enabled
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:135:13-35
+	android:exported
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:136:13-36
+	android:permission
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:137:13-57
+	tools:targetApi
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:138:13-32
+	android:directBootAware
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:134:13-44
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:133:13-78
+intent-filter#action:name:androidx.work.diagnostics.REQUEST_DIAGNOSTICS
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:139:13-141:29
+action#androidx.work.diagnostics.REQUEST_DIAGNOSTICS
+ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:17-88
+	android:name
+		ADDED from [androidx.work:work-runtime:2.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/69556892578a74abb6c1cc18b0bae194/transformed/work-runtime-2.9.0/AndroidManifest.xml:140:25-85
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pratyut/.gradle/caches/9.2.1/transforms/698a3c0cb5895fc48687758f2cb27694/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/pratyut/.gradle/caches/9.2.1/transforms/c73d933bf45972bdeb7784688d0aca73/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+permission#com.masterapp.chat.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+uses-permission#com.masterapp.chat.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pratyut/.gradle/caches/9.2.1/transforms/ecaec30700409a17881b0349323d9cab/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/pratyut/.gradle/caches/9.2.1/transforms/4e9065012400769da07fb4bba7f01495/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pratyut/.gradle/caches/9.2.1/transforms/e3985b40cdb81a49e58bce5fe19858e1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

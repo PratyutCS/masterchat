@@ -1,0 +1,232 @@
+You are an expert distributed-systems and mobile messaging architect. Design and validate a **robust two-way chat persistence and synchronization architecture** for a real-time texting application that currently suffers from “failed to load chats” errors.
+
+The system must satisfy the following detailed functional and non-functional requirements.
+
+---
+
+## 1. High-Level Objective
+
+Build a **fault-tolerant, offline-first chat system** where:
+
+* Chats are **cached locally on each user’s device**
+* Chats are **persisted in the cloud backend**
+* Sync occurs **bi-directionally and eventually consistently**
+* Message ordering is **deterministic and correct**
+* The system works **even when users go offline intermittently**
+* No chats are lost, duplicated, or misordered
+
+---
+
+## 2. Local Device Storage (Client-Side Requirements)
+
+Design the client to implement **offline-first local persistence** with the following properties:
+
+### 2.1 Per-Conversation Local Cache
+
+* Each conversation between User A and User B must be stored locally on both devices.
+* Storage must survive:
+
+  * App restarts
+  * Device reboots
+  * Temporary network loss
+* Recommend appropriate storage technology (e.g., SQLite, Realm, IndexedDB).
+
+### 2.2 Write Path (When User Sends a Message)
+
+When a user sends a message:
+
+1. Message must be written immediately to the **local database** with status:
+
+   * `pending`
+2. UI must render the message instantly (optimistic update).
+3. Message must be queued for background sync.
+4. Message must include:
+
+   * globally unique message ID
+   * sender ID
+   * receiver ID
+   * client timestamp
+   * logical ordering metadata
+   * delivery state
+
+### 2.3 Offline Behavior
+
+If the device is offline:
+
+* Messages must still:
+
+  * be stored locally
+  * appear in the chat UI
+  * remain in the outbound sync queue
+* Sync must automatically resume when connectivity returns.
+
+---
+
+## 3. Cloud Backend Storage Requirements
+
+Design the backend so that:
+
+### 3.1 Conversation Separation
+
+* Chat logs must be logically partitioned per conversation (User A ↔ User B).
+* Storage model must support:
+
+  * fast pagination
+  * conflict resolution
+  * idempotent writes
+* Recommend database choice (e.g., PostgreSQL, DynamoDB, Cassandra, etc.).
+
+### 3.2 Message Durability
+
+* Writes must be atomic and durable.
+* The system must tolerate:
+
+  * duplicate client retries
+  * out-of-order arrival
+  * partial sync failures
+
+### 3.3 Sync API Requirements
+
+Define APIs for:
+
+* send message
+* fetch incremental messages
+* acknowledge delivery/read
+* batch sync
+
+All APIs must be **idempotent**.
+
+---
+
+## 4. Bi-Directional Sync Mechanism
+
+Design a **two-way synchronization protocol**.
+
+### 4.1 Client → Server Sync
+
+When the user comes online:
+
+* Pending local messages must be batched and uploaded.
+* Server must:
+
+  * deduplicate by message ID
+  * persist in canonical order
+  * return authoritative metadata
+
+### 4.2 Server → Client Sync
+
+Each client must periodically or via push:
+
+* fetch messages newer than last sync cursor
+* merge into local database
+* update message states
+
+### 4.3 Sync Triggers
+
+Specify when sync runs:
+
+* app foreground
+* connectivity regained
+* periodic background job
+* push notification wake-up
+
+---
+
+## 5. Multi-Device and Cross-User Delivery
+
+Ensure that:
+
+* When User A sends a message:
+
+  * it appears on User A immediately (local)
+  * it appears on User B after B syncs or receives push
+* If both users were offline and later reconnect:
+
+  * all messages must reconcile correctly
+  * no overwrites or losses
+* System must support eventual consistency.
+
+---
+
+## 6. Message Ordering Guarantees (Critical)
+
+Design a deterministic ordering strategy that handles:
+
+* offline sends from both users
+* clock skew between devices
+* network delays
+* batch uploads
+
+You must specify and compare:
+
+* server timestamps vs client timestamps
+* Lamport clocks or vector clocks (if applicable)
+* monotonic sequence numbers per conversation
+
+Define the **source of truth for ordering** and how the UI should sort messages.
+
+---
+
+## 7. Conflict Resolution
+
+Explain how the system handles:
+
+* duplicate messages
+* retries
+* partial failures
+* concurrent sends while offline
+
+Include exact merge rules.
+
+---
+
+## 8. Failure Modes and Observability
+
+Because the current system shows “failed to load chats”, include:
+
+### 8.1 Likely Failure Causes
+
+* cache corruption
+* bad pagination cursor
+* race conditions
+* sync gaps
+* backend timeout
+
+### 8.2 Required Safeguards
+
+Design:
+
+* retry policies
+* exponential backoff
+* dead-letter handling
+* data integrity checks
+* telemetry and logging
+
+---
+
+## 9. Performance and Scalability
+
+Provide guidance for:
+
+* batching strategy
+* pagination window size
+* index design
+* push vs polling tradeoffs
+* handling millions of conversations
+
+---
+
+## 10. Deliverables Expected from You
+
+Produce:
+
+* system architecture diagram (described in text)
+* client data model
+* server schema
+* sync sequence flows
+* ordering algorithm
+* edge case handling
+* recommended tech stack
+* step-by-step sync lifecycle
+
+Be extremely precise and production-oriented. Avoid generic advice.

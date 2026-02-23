@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#8B5CF6</color>
+    <color name="background">#F3F4F6</color>
+    <color name="bubble_received">#FFFFFF</color>
+    <color name="bubble_sent">#4F46E5</color>
+    <color name="card_stroke">#E5E7EB</color>
+    <color name="chat_background">#E5E7EB</color>
+    <color name="link_color">#6366F1</color>
+    <color name="primary">#4F46E5</color>
+    <color name="primary_dark">#312E81</color>
+    <color name="send_button">#4F46E5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_primary">#111827</color>
+    <color name="text_secondary">#6B7280</color>
+    <string name="app_name">MasterChat</string>
+    <style name="ShapeAppearance.MasterChat.Large" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32dp</item> 
+    </style>
+    <style name="ShapeAppearance.MasterChat.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item> 
+    </style>
+    <style name="ShapeAppearance.MasterChat.Small" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <style name="TextAppearance.MasterChat.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Theme.MasterChat" parent="Theme.MaterialComponents.Light.NoActionBar">
+        
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        
+        
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="backgroundColor">@color/background</item>
+        
+        
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        
+        
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MasterChat.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MasterChat.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MasterChat.Large</item>
+    </style>
+</resources>
