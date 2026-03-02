@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 public class SyncScheduler {
     private static final String TAG = "SyncScheduler";
     private static final String SYNC_WORK_NAME = "MasterLinearSync";
-    public static final long TICK_INTERVAL_MS = 5000; // 5 seconds high-frequency tick
+    public static final long TICK_INTERVAL_MS = 3000; // 3 second frequency tick
 
     public static void startHeartbeat(Context context) {
         Log.d(TAG, "Initiating Sync Heartbeat...");
         scheduleNextTick(context, 0); // Start immediately
-    }
+    }   
 
     public static void scheduleNextTick(Context context, long delayMillis) {
         OneTimeWorkRequest syncRequest = new OneTimeWorkRequest.Builder(LinearSyncWorker.class)
