@@ -1,139 +1,91 @@
-# Phase 1 — Real-Time 1-to-1 Chat Application
+# MasterChat: High-Performance Offline-First Messaging Platform
 
-A minimal real-time private chat app with a Node.js backend and Android frontend.
+MasterChat is a state-of-the-art, **Offline-First**, eventually consistent communication platform. It combines a robust REST synchronization engine with low-latency Socket.IO real-time events to provide a seamless "fast UI" experience across any network condition.
 
-## Project Structure
+---
+
+## 🚀 Key Features
+
+*   **Atomic Offline-First Architecture**: Every action (send, read, delete) is persisted locally first for instant UI response and then synchronized in the background.
+*   **Game-Engine Heartbeat Sync**: A high-frequency (5-second) background heartbeat ensures data parity even when Socket.IO events are missed.
+*   **Full Data Reconciliation**: Identifies and prunes "zombie" local messages that have been hard-deleted on the server.
+*   **Administrative Oversight**: A built-in Admin Panel for managing Users, Conversations, and Messages with real-time sync-triggering capabilities.
+*   **Incremental Time-Based Pulling**: Optimized synchronization that catches message edits and status changes by tracking `updatedAt` timestamps.
+
+---
+
+## 🏗️ Project Structure
 
 ```
 master_app/
-├── backend/          # Node.js + Express + MongoDB + Socket.IO
-│   ├── server.js     # Entry point
-│   ├── config/       # Database connection
-│   ├── models/       # Mongoose schemas (User, Conversation, Message)
-│   ├── middleware/    # JWT auth middleware
-│   ├── routes/       # REST API routes
-│   └── socket/       # Socket.IO event handlers
+├── backend/              # Node.js + Express + MongoDB + Socket.IO
+│   ├── server.js         # Entry point & Socket.IO initialization
+│   ├── routes/           # REST API Logic
+│   │   ├── sync.js       # Core "Heavy Lifting" Synchronization Engine
+│   │   ├── admin.js      # Administrative CRUD & Cascade Logic
+│   │   └── auth/conv/msg # Standard endpoints
+│   └── models/           # Mongoose schemas with sequenceId & updatedAt indexing
 │
-└── android/          # Android app (Java, MVVM, XML)
-    └── app/src/main/
-        └── java/com/masterapp/chat/
-            ├── api/        # Retrofit interfaces + client
-            ├── models/     # Data models
-            ├── socket/     # Socket.IO manager
-            ├── repository/ # Data repositories
-            ├── viewmodel/  # MVVM ViewModels
-            ├── ui/         # Activities + adapters
-            └── util/       # Token manager, constants
+└── android/              # Android App (Java, MVVM, Room, WorkManager)
+    └── app/src/main/java/com/masterapp/chat/
+        ├── sync/         # The "Brain": Heartbeat (Scheduler) & Linear Sync Worker
+        ├── local/        # Persistence: Room Entities & DAOs for offline safety
+        ├── api/          # Network: Retrofit Sync & Reconciliation API
+        ├── socket/       # Real-time: Centralized Socket.IO Manager
+        └── ui/viewmodel  # Presentation: Reverse Layout + Reactivity
 ```
 
 ---
 
-## Backend Setup
+## 🛠️ Getting Started
 
-### Prerequisites
-- **Node.js** v18+ installed
-- **MongoDB** running locally on default port (27017)
+### Backend Setup
+1.  **Start MongoDB**: Ensure `mongod` is running on `localhost:27017`.
+2.  **Environment**: Configure `.env` (JWT_SECRET, MONGO_URI).
+3.  **Run**: `cd backend && npm install && node server.js`.
+4.  **Admin Panel**: Access via `http://localhost:5000/admin`.
 
-### Steps
-
-```bash
-# 1. Navigate to backend
-cd backend
-
-# 2. Install dependencies
-npm install
-
-# 3. Copy and configure environment variables
-cp .env.example .env
-# Edit .env if needed (defaults work for local dev)
-
-# 4. Make sure MongoDB is running
-# On Ubuntu/Debian:
-sudo systemctl start mongod
-# On macOS with Homebrew:
-brew services start mongodb-community
-
-# 5. Start the server
-node server.js
-```
-
-You should see:
-```
-MongoDB connected: localhost
-Server running on port 5000
-REST API: http://localhost:5000/api
-Socket.IO: ws://localhost:5000
-```
-
-### Test the API
-
-```bash
-# Register a user
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"username":"alice","email":"alice@test.com","password":"password123"}'
-
-# Login
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"alice@test.com","password":"password123"}'
-```
-
-Both return: `{ "token": "eyJ...", "user": { ... } }`
+### Android Setup
+1.  **Configure**: Update the server URL in `app/build.gradle` (use LAN IP for physical devices).
+2.  **Run**: Open in Android Studio, sync Gradle, and install on a device/emulator.
+3.  **Heartbeat**: The 5-second sync heartbeat starts automatically upon login.
 
 ---
 
-## Android Setup
+## ⛓️ Synchronization Architecture
 
-### Prerequisites
-- **Android Studio** (latest stable)
-- **Android SDK** API 34
+### Upstream (Client → Server)
+Uses an **Outbox Pattern**. Messages are queued in Room and pushed by the `LinearSyncWorker` to `POST /api/sync/messages`. The server assigns a monotonic `sequenceId` to guarantee global ordering.
 
-### Steps
-
-1. Open Android Studio
-2. Select **Open an existing project**
-3. Navigate to `master_app/android/` and open it
-4. Wait for Gradle sync to complete
-5. **Important:** Update the server URL in `app/build.gradle`:
-   - For **emulator**: use `http://10.0.2.2:5000` (default, maps to host localhost)
-   - For **physical device**: use your machine's LAN IP, e.g., `http://192.168.1.X:5000`
-6. Build and run on a device/emulator
-
-### Usage Flow
-
-1. **Register** two different users (on two devices or with separate app data)
-2. **Login** on each device
-3. On one device, tap the **+** button to start a new chat
-4. Select the other user from the list
-5. Send messages — they appear in real-time on both devices!
-6. Message status: ✓ = sent, ✓✓ = delivered/read
+### Downstream (Server → Client)
+Uses **Dual-Pivot Incremental Pulling**:
+*   **Sequence-Based**: Pulls everything where `sequenceId > lastPulledSeq`.
+*   **Time-Based**: Pulls everything where `updatedAt > lastPulledAt` (to catch edits).
+*   **Reconciliation**: Compares local UUIDs against server active-sets to clear hard-deletions.
 
 ---
 
-## API Endpoints
+## 📡 Enhanced API & Socket Bus
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/auth/register` | No | Register new user |
-| POST | `/api/auth/login` | No | Login, get JWT |
-| GET | `/api/users` | Yes | List all users |
-| GET | `/api/users/:id` | Yes | Get user profile |
-| POST | `/api/conversations` | Yes | Create/find conversation |
-| GET | `/api/conversations` | Yes | List my conversations |
-| GET | `/api/messages/:convId` | Yes | Get messages (paginated) |
+### Core Sync Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/sync/messages` | Batch-push local outbox messages |
+| GET | `/api/sync/messages` | Incremental pull (afterSeq + updatedAfter) |
+| GET | `/api/sync/reconcile-ids` | Full UUID set for local purging/reconciliation |
+| POST | `/api/sync/ack` | Two-phase confirmation of message persistence |
 
-## Socket Events
+### Admin & Control Bus
+| Direction | Event | Payload | Description |
+|-----------|-------|---------|-------------|
+| Server→Client | `global_sync_required` | `{}` | Forces an immediate out-of-band sync |
+| Server→Client | `message_deleted_from_admin` | `{ msgUuid }` | Direct local purge of a deleted message |
+| Server→Client | `conversation_deleted` | `{ conversationId }` | Full local cleanup of a deleted chat |
 
-| Direction | Event | Payload |
-|-----------|-------|---------|
-| Client→Server | `authenticate` | `{ token }` |
-| Client→Server | `join_conversation` | `{ conversationId }` |
-| Client→Server | `send_message` | `{ conversationId, text }` |
-| Client→Server | `mark_read` | `{ conversationId, messageIds[] }` |
-| Server→Client | `authenticated` | `{ userId, username }` |
-| Server→Client | `receive_message` | `{ message object }` |
-| Server→Client | `message_delivered` | `{ messageId, conversationId }` |
-| Server→Client | `message_read` | `{ conversationId, messageIds[], readBy }` |
-| Server→Client | `user_online` | `{ userId, username }` |
-| Server→Client | `user_offline` | `{ userId, username, lastSeen }` |
+---
+
+## 📜 Design Principles
+MasterChat strictly adheres to the **"Source of Truth Hierarchy"**:
+1.  **UI Level**: Room is "God." The UI never waits for the network.
+2.  **Sync Level**: MongoDB is "Final Arbiter." It resolves conflicts via server-side locking and sequence assignment.
+3.  **Transport Level**: Socket.IO is the "Speed Layer," while REST + 5s Heartbeat is the "Reliability Layer."
