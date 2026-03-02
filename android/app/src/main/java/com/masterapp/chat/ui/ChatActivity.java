@@ -11,6 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.masterapp.chat.R;
+import com.masterapp.chat.local.entity.ConversationEntity;
+import com.masterapp.chat.local.entity.MessageEntity;
+import com.masterapp.chat.models.Message;
+import com.masterapp.chat.models.User;
+import com.masterapp.chat.repository.ConversationRepository;
+import com.masterapp.chat.socket.SocketManager;
 import com.masterapp.chat.ui.adapter.MessageAdapter;
 import com.masterapp.chat.util.TokenManager;
 import com.masterapp.chat.viewmodel.ChatViewModel;
@@ -70,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
         // Setup RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true); // show newest messages at bottom
+        layoutManager.setReverseLayout(true); // Index 0 is at the bottom
         rvMessages.setLayoutManager(layoutManager);
 
         adapter = new MessageAdapter(tokenManager.getUserId());
@@ -79,38 +86,37 @@ public class ChatActivity extends AppCompatActivity {
         viewModel.initChat(conversationId);
 
         // Observe messages from ViewModel (which now provides MessageEntity from Room)
-        viewModel.getMessages().observe(this, new androidx.lifecycle.Observer<List<com.masterapp.chat.local.entity.MessageEntity>>() {
-            @Override
-            public void onChanged(List<com.masterapp.chat.local.entity.MessageEntity> messageEntities) {
-                if (messageEntities != null) {
-                    List<com.masterapp.chat.models.Message> uiMessages = new ArrayList<>();
+        viewModel.getMessages().observe(this, messageEntities -> {
+            if (messageEntities != null) {
+                List<Message> uiMessages = new ArrayList<>();
+                
+                // Convert Room Entities to UI Models
+                for (MessageEntity entity : messageEntities) {
+                    User sender = new User();
+                    sender.setId(entity.senderId);
                     
-                    // Convert Room Entities to UI Models
-                    for (com.masterapp.chat.local.entity.MessageEntity entity : messageEntities) {
-                        com.masterapp.chat.models.User sender = new com.masterapp.chat.models.User();
-                        sender.setId(entity.senderId);
-                        
-                        com.masterapp.chat.models.Message msg = new com.masterapp.chat.models.Message();
-                        msg.setId(entity.msgUuid);
-                        msg.setConversationId(entity.conversationId);
-                        msg.setText(entity.text);
-                        msg.setSenderId(sender);
-                        msg.setStatus(entity.status);
-                        msg.setSentAt(entity.sentAt);
-                        msg.setReadAt(entity.readAt);
-                        
-                        uiMessages.add(msg);
-                    }
-
-                    adapter.setMessages(uiMessages);
-                    // Scroll to bottom when new messages arrive
-                    if (!uiMessages.isEmpty()) {
-                        rvMessages.scrollToPosition(uiMessages.size() - 1);
-                    }
-
-                    // Mark unread messages as read
-                    markUnreadMessages(messageEntities);
+                    Message msg = new Message();
+                    msg.setId(entity.msgUuid);
+                    msg.setConversationId(entity.conversationId);
+                    msg.setText(entity.text);
+                    msg.setSenderId(sender);
+                    msg.setStatus(entity.status);
+                    msg.setSentAt(entity.sentAt);
+                    msg.setReadAt(entity.readAt);
+                    msg.setDeliveredAt(entity.deliveredAt);
+                    msg.setCreatedAt(String.valueOf(entity.localTimestamp));
+                    
+                    uiMessages.add(msg);
                 }
+
+                adapter.setMessages(uiMessages);
+                // Scroll to bottom (position 0 in reverse layout) when new messages arrive
+                if (!uiMessages.isEmpty()) {
+                    rvMessages.scrollToPosition(0);
+                }
+
+                // Mark unread messages as read
+                markUnreadMessages(messageEntities);
             }
         });
 
@@ -118,8 +124,24 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(v -> {
             String text = etMessage.getText().toString().trim();
             if (!text.isEmpty()) {
-                viewModel.sendMessage(text);
+                String receiverId = getIntent().getStringExtra("otherUserId");
+                viewModel.sendMessage(text, receiverId);
                 etMessage.setText("");
+                rvMessages.scrollToPosition(0);
+            }
+        });
+
+        // Listen for remote chat deletion
+        SocketManager.getInstance().getConversationDeletedEvents().observe(this, data -> {
+            if (data == null) return;
+            try {
+                String deletedId = data.getString("conversationId");
+                if (conversationId != null && conversationId.equals(deletedId)) {
+                    Toast.makeText(this, "This chat has been deleted by the other user", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            } catch (Exception e) {
+                android.util.Log.e("ChatActivity", "Error parsing deletion event: " + e.getMessage());
             }
         });
     }
@@ -128,12 +150,11 @@ public class ChatActivity extends AppCompatActivity {
      * Mark received messages (from the other user) as read.
      * Use the entities fromRoom directly to get sequence IDs.
      */
-    private void markUnreadMessages(List<com.masterapp.chat.local.entity.MessageEntity> entities) {
+    private void markUnreadMessages(List<MessageEntity> entities) {
         List<String> unreadIds = new ArrayList<>();
         Long maxSeq = null;
         String myId = tokenManager.getUserId();
-
-        for (com.masterapp.chat.local.entity.MessageEntity msg : entities) {
+        for (MessageEntity msg : entities) {
             if (msg.senderId != null && !msg.senderId.equals(myId) && !"read".equals(msg.status)) {
                 unreadIds.add(msg.msgUuid);
                 if (msg.sequenceId != null) {
@@ -165,14 +186,14 @@ public class ChatActivity extends AppCompatActivity {
                             (otherUsername != null ? otherUsername : "this user") +
                             "?\nAll messages will be removed.")
                     .setPositiveButton("Delete", (dialog, which) -> {
-                        com.masterapp.chat.repository.ConversationRepository repo =
-                                new com.masterapp.chat.repository.ConversationRepository();
-                        repo.deleteConversation(this, conversationId).observe(this, success -> {
+                        ConversationRepository repo =
+                                new ConversationRepository(ChatActivity.this);
+                        repo.deleteConversation(ChatActivity.this, conversationId).observe(ChatActivity.this, success -> {
                             if (success != null && success) {
-                                Toast.makeText(this, "Chat deleted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ChatActivity.this, "Chat deleted", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
-                                Toast.makeText(this, "Failed to delete chat", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ChatActivity.this, "Failed to delete chat", Toast.LENGTH_SHORT).show();
                             }
                         });
                     })

@@ -20,6 +20,7 @@ public class Message {
     private String createdAt;
     private String sentAt;
     private String readAt;
+    private String deliveredAt;
 
     // ----- Getters -----
     public String getId() { return id; }
@@ -30,6 +31,7 @@ public class Message {
     public String getCreatedAt() { return createdAt; }
     public String getSentAt() { return sentAt; }
     public String getReadAt() { return readAt; }
+    public String getDeliveredAt() { return deliveredAt; }
 
     // ----- Setters -----
     public void setId(String id) { this.id = id; }
@@ -40,6 +42,7 @@ public class Message {
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setSentAt(String sentAt) { this.sentAt = sentAt; }
     public void setReadAt(String readAt) { this.readAt = readAt; }
+    public void setDeliveredAt(String deliveredAt) { this.deliveredAt = deliveredAt; }
 
     /**
      * Helper: check if this message was sent by the given user.

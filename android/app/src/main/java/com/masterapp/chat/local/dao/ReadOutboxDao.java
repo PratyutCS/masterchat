@@ -28,13 +28,16 @@ public interface ReadOutboxDao {
     @Query("SELECT * FROM read_outbox WHERE synced = 0")
     List<ReadOutbox> getPendingReadEvents();
 
-    /** Mark a conversation's read watermark as acked by server */
-    @Query("UPDATE read_outbox SET synced = 1 WHERE conversationId = :convId")
-    void markAcked(String convId);
+    /** Mark a conversation's read watermark as acked by server up to a specific sequenceId */
+    @Query("UPDATE read_outbox SET synced = 1 WHERE conversationId = :convId AND maxSequenceId <= :ackSeqId")
+    void markAcked(String convId, long ackSeqId);
 
-    /** Mark multiple conversations as acked */
-    @Query("UPDATE read_outbox SET synced = 1 WHERE conversationId IN (:convIds)")
-    void markAckedBatch(List<String> convIds);
+    /** Mark multiple conversations as acked up to their respective values */
+    default void markAckedBatchSafe(List<ReadOutbox> items) {
+        for (ReadOutbox item : items) {
+            markAcked(item.conversationId, item.maxSequenceId);
+        }
+    }
 
     /** Get the current watermark for a conversation (for UI display) */
     @Query("SELECT maxSequenceId FROM read_outbox WHERE conversationId = :convId")

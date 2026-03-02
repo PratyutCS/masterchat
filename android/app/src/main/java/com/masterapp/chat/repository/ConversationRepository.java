@@ -2,11 +2,19 @@ package com.masterapp.chat.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.masterapp.chat.api.ApiClient;
+import com.masterapp.chat.local.AppDatabase;
+import com.masterapp.chat.local.entity.ConversationEntity;
+import com.masterapp.chat.local.entity.SyncQueueEntity;
 import com.masterapp.chat.models.Conversation;
 import com.masterapp.chat.models.CreateConversationRequest;
 import com.masterapp.chat.models.User;
+import com.masterapp.chat.sync.DownstreamSyncWorker;
+import com.masterapp.chat.sync.SyncWorker;
 
 import java.util.List;
 
@@ -16,165 +24,117 @@ import retrofit2.Response;
 
 /**
  * Repository for conversation operations.
- * Bridges ViewModel ↔ Retrofit API.
+ * Bridges ViewModel ↔ Retrofit API ↔ Room.
  */
 public class ConversationRepository {
 
-    /**
-     * Get all conversations for the current user.
-     */
-    public LiveData<List<Conversation>> getConversations() {
-        MutableLiveData<List<Conversation>> result = new MutableLiveData<>();
+    private final com.masterapp.chat.local.dao.ConversationDao conversationDao;
+    private final AppDatabase db;
 
-        ApiClient.getConversationApi()
-                .getConversations()
-                .enqueue(new Callback<List<Conversation>>() {
-                    @Override
-                    public void onResponse(Call<List<Conversation>> call,
-                                           Response<List<Conversation>> response) {
-                        if (response.isSuccessful()) {
-                            result.postValue(response.body());
-                        } else {
-                            result.postValue(null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Conversation>> call, Throwable t) {
-                        result.postValue(null);
-                    }
-                });
-
-        return result;
+    public ConversationRepository(android.content.Context context) {
+        this.db = AppDatabase.getDatabase(context);
+        this.conversationDao = db.conversationDao();
     }
 
-    /**
-     * Create or find a 1-to-1 conversation with another user.
-     */
+    public LiveData<List<ConversationEntity>> getConversations() {
+        return conversationDao.getAllConversations();
+    }
+
+    public void refreshConversations() {
+        OneTimeWorkRequest syncRequest = new OneTimeWorkRequest.Builder(com.masterapp.chat.sync.LinearSyncWorker.class).build();
+        WorkManager.getInstance(com.masterapp.chat.ChatApplication.getAppContext())
+                .enqueueUniqueWork("LinearMasterSyncManual", ExistingWorkPolicy.REPLACE, syncRequest);
+    }
+
     public LiveData<Conversation> createConversation(String recipientId) {
         MutableLiveData<Conversation> result = new MutableLiveData<>();
-
-        ApiClient.getConversationApi()
-                .createConversation(new CreateConversationRequest(recipientId))
+        ApiClient.getConversationApi().createConversation(new CreateConversationRequest(recipientId))
                 .enqueue(new Callback<Conversation>() {
                     @Override
-                    public void onResponse(Call<Conversation> call,
-                                           Response<Conversation> response) {
-                        if (response.isSuccessful()) {
-                            result.postValue(response.body());
-                        } else {
-                            result.postValue(null);
-                        }
+                    public void onResponse(Call<Conversation> call, Response<Conversation> response) {
+                        result.postValue(response.isSuccessful() ? response.body() : null);
                     }
-
                     @Override
                     public void onFailure(Call<Conversation> call, Throwable t) {
                         result.postValue(null);
                     }
                 });
-
         return result;
     }
 
-    /**
-     * Get all users (for starting new conversations).
-     */
     public LiveData<List<User>> getUsers() {
         MutableLiveData<List<User>> result = new MutableLiveData<>();
-
-        ApiClient.getUserApi()
-                .getUsers()
-                .enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call,
-                                           Response<List<User>> response) {
-                        if (response.isSuccessful()) {
-                            result.postValue(response.body());
-                        } else {
-                            result.postValue(null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
-                        result.postValue(null);
-                    }
-                });
+        ApiClient.getUserApi().getUsers().enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                result.postValue(response.isSuccessful() ? response.body() : null);
+            }
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                result.postValue(null);
+            }
+        });
         return result;
     }
 
-    public interface LoadCallback<T> {
-        void onLoaded(T data);
-    }
-
-    public void fetchConversations(LoadCallback<List<Conversation>> callback) {
-        ApiClient.getConversationApi()
-                .getConversations()
-                .enqueue(new Callback<List<Conversation>>() {
-                    @Override
-                    public void onResponse(Call<List<Conversation>> call, Response<List<Conversation>> response) {
-                        callback.onLoaded(response.isSuccessful() ? response.body() : null);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Conversation>> call, Throwable t) {
-                        callback.onLoaded(null);
-                    }
-                });
-    }
-
-    public void fetchUsers(LoadCallback<List<User>> callback) {
-        ApiClient.getUserApi()
-                .getUsers()
-                .enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        callback.onLoaded(response.isSuccessful() ? response.body() : null);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
-                        callback.onLoaded(null);
-                    }
-                });
-    }
-
     /**
-     * Deletes a conversation from the server and cleans up local message cache.
+     * Offline-First Deletion:
+     * 1. Remove from local Room immediately.
+     * 2. Add 'DELETE_CONV' to sync_queue.
+     * 3. Trigger SyncWorker.
      */
     public LiveData<Boolean> deleteConversation(android.content.Context context, String conversationId) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
 
-        ApiClient.getConversationApi()
-                .deleteConversation(conversationId)
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            // Server deletion success — now clean up local SQLite
-                            new Thread(() -> {
-                                com.masterapp.chat.local.AppDatabase db = 
-                                    com.masterapp.chat.local.AppDatabase.getDatabase(context);
-                                
-                                // 1. Remove all local messages for this room
-                                db.messageDao().deleteMessagesByConversation(conversationId);
-                                
-                                // 2. Remove sync checkpoint
-                                db.syncCheckpointDao().deleteCheckpoint(conversationId);
-                                
-                                result.postValue(true);
-                            }).start();
-                        } else {
-                            result.postValue(false);
-                        }
-                    }
+        new Thread(() -> {
+            try {
+                db.runInTransaction(() -> {
+                    // 1. Local cleanup
+                    db.messageDao().deleteMessagesByConversation(conversationId);
+                    db.syncCheckpointDao().deleteCheckpoint(conversationId);
+                    db.conversationDao().deleteById(conversationId);
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        result.postValue(false);
-                    }
+                    // 2. Queue for server sync
+                    SyncQueueEntity syncEntry = new SyncQueueEntity(conversationId, "DELETE_CONV", System.currentTimeMillis());
+                    db.syncQueueDao().insert(syncEntry);
                 });
 
+                // 3. Trigger Master Sync
+                OneTimeWorkRequest syncRequest = new OneTimeWorkRequest.Builder(com.masterapp.chat.sync.LinearSyncWorker.class).build();
+                WorkManager.getInstance(context).enqueueUniqueWork("LinearMasterSyncUpstream", ExistingWorkPolicy.REPLACE, syncRequest);
+
+                result.postValue(true);
+            } catch (Exception e) {
+                result.postValue(false);
+            }
+        }).start();
+
         return result;
+    }
+
+    public void resetSync() {
+        db.runInTransaction(() -> {
+            db.messageDao().deleteAll();
+            db.conversationDao().deleteAll();
+            db.syncCheckpointDao().deleteAll();
+            refreshConversations();
+        });
+    }
+
+    public void fetchUsers(LoadCallback<List<User>> callback) {
+        ApiClient.getUserApi().getUsers().enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                callback.onLoaded(response.isSuccessful() ? response.body() : null);
+            }
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                callback.onLoaded(null);
+            }
+        });
+    }
+
+    public interface LoadCallback<T> {
+        void onLoaded(T data);
     }
 }

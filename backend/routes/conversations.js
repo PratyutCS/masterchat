@@ -1,6 +1,7 @@
 const express = require('express');
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
+const ReadWatermark = require('../models/ReadWatermark');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -120,11 +121,27 @@ router.delete('/:id', auth, async (req, res) => {
             return res.status(404).json({ error: 'Conversation not found or not authorized' });
         }
 
-        // Delete all associated messages
-        await Message.deleteMany({ conversationId });
+        // 1. Get member IDs for notification before deletion
+        const memberIds = conversation.members;
 
-        // Delete the conversation itself
+        // 2. Delete all associated messages and watermarks
+        await Message.deleteMany({ conversationId });
+        await ReadWatermark.deleteMany({ conversationId });
+
+        // 3. Delete the conversation itself
         await Conversation.deleteOne({ _id: conversationId });
+
+        // 4. Notify all participants via socket
+        const io = req.app.get('io');
+        if (io) {
+            // Notify the room (for those currently in ChatActivity)
+            io.to(conversationId).emit('conversation_deleted', { conversationId });
+
+            // Notify each user's personal room (for those in Dashboard/ConversationList)
+            memberIds.forEach(mId => {
+                io.to(`user_${mId.toString()}`).emit('conversation_deleted', { conversationId });
+            });
+        }
 
         res.json({ message: 'Conversation and all associated messages deleted successfully' });
     } catch (error) {

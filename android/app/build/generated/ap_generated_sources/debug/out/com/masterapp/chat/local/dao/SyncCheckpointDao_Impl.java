@@ -25,7 +25,7 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
 
   private final EntityInsertionAdapter<SyncCheckpoint> __insertionAdapterOfSyncCheckpoint;
 
-  private final SharedSQLiteStatement __preparedStmtOfUpdatePulledSeq;
+  private final SharedSQLiteStatement __preparedStmtOfUpdatePulledCheckpoint;
 
   private final SharedSQLiteStatement __preparedStmtOfUpdatePushedAt;
 
@@ -33,13 +33,15 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteCheckpoint;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
+
   public SyncCheckpointDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfSyncCheckpoint = new EntityInsertionAdapter<SyncCheckpoint>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `sync_checkpoints` (`conversationId`,`lastPulledSeq`,`lastPushedAt`,`updatedAt`) VALUES (?,?,?,?)";
+        return "INSERT OR REPLACE INTO `sync_checkpoints` (`conversationId`,`lastPulledSeq`,`lastPulledAt`,`lastPushedAt`,`updatedAt`) VALUES (?,?,?,?,?)";
       }
 
       @Override
@@ -51,15 +53,16 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
           statement.bindString(1, entity.conversationId);
         }
         statement.bindLong(2, entity.lastPulledSeq);
-        statement.bindLong(3, entity.lastPushedAt);
-        statement.bindLong(4, entity.updatedAt);
+        statement.bindLong(3, entity.lastPulledAt);
+        statement.bindLong(4, entity.lastPushedAt);
+        statement.bindLong(5, entity.updatedAt);
       }
     };
-    this.__preparedStmtOfUpdatePulledSeq = new SharedSQLiteStatement(__db) {
+    this.__preparedStmtOfUpdatePulledCheckpoint = new SharedSQLiteStatement(__db) {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE sync_checkpoints SET lastPulledSeq = ?, updatedAt = ? WHERE conversationId = ?";
+        final String _query = "UPDATE sync_checkpoints SET lastPulledSeq = ?, lastPulledAt = ?, updatedAt = ? WHERE conversationId = ?";
         return _query;
       }
     };
@@ -75,7 +78,7 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "INSERT OR IGNORE INTO sync_checkpoints (conversationId, lastPulledSeq, lastPushedAt, updatedAt) VALUES (?, 0, 0, ?)";
+        final String _query = "INSERT OR IGNORE INTO sync_checkpoints (conversationId, lastPulledSeq, lastPulledAt, lastPushedAt, updatedAt) VALUES (?, 0, 0, 0, ?)";
         return _query;
       }
     };
@@ -84,6 +87,14 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
       @NonNull
       public String createQuery() {
         final String _query = "DELETE FROM sync_checkpoints WHERE conversationId = ?";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM sync_checkpoints";
         return _query;
       }
     };
@@ -102,14 +113,17 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
   }
 
   @Override
-  public void updatePulledSeq(final String convId, final long seq, final long now) {
+  public void updatePulledCheckpoint(final String convId, final long seq, final long pulledAt,
+      final long now) {
     __db.assertNotSuspendingTransaction();
-    final SupportSQLiteStatement _stmt = __preparedStmtOfUpdatePulledSeq.acquire();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfUpdatePulledCheckpoint.acquire();
     int _argIndex = 1;
     _stmt.bindLong(_argIndex, seq);
     _argIndex = 2;
-    _stmt.bindLong(_argIndex, now);
+    _stmt.bindLong(_argIndex, pulledAt);
     _argIndex = 3;
+    _stmt.bindLong(_argIndex, now);
+    _argIndex = 4;
     if (convId == null) {
       _stmt.bindNull(_argIndex);
     } else {
@@ -124,7 +138,7 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
         __db.endTransaction();
       }
     } finally {
-      __preparedStmtOfUpdatePulledSeq.release(_stmt);
+      __preparedStmtOfUpdatePulledCheckpoint.release(_stmt);
     }
   }
 
@@ -204,8 +218,55 @@ public final class SyncCheckpointDao_Impl implements SyncCheckpointDao {
   }
 
   @Override
+  public void deleteAll() {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+    try {
+      __db.beginTransaction();
+      try {
+        _stmt.executeUpdateDelete();
+        __db.setTransactionSuccessful();
+      } finally {
+        __db.endTransaction();
+      }
+    } finally {
+      __preparedStmtOfDeleteAll.release(_stmt);
+    }
+  }
+
+  @Override
   public Long getLastPulledSeq(final String convId) {
     final String _sql = "SELECT lastPulledSeq FROM sync_checkpoints WHERE conversationId = ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (convId == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, convId);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final Long _result;
+      if (_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getLong(0);
+        }
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public Long getLastPulledAt(final String convId) {
+    final String _sql = "SELECT lastPulledAt FROM sync_checkpoints WHERE conversationId = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     if (convId == null) {

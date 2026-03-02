@@ -16,8 +16,16 @@ public interface SyncApi {
     @GET("/api/sync/messages")
     Call<List<MessageEntity>> pullMessages(
             @Query("conversationId") String conversationId,
-            @Query("afterSequenceId") long afterSequenceId
+            @Query("afterSequenceId") long afterSequenceId,
+            @Query("updatedAfter") String updatedAfter
     );
+
+    @GET("/api/sync/reconcile-ids")
+    Call<ReconcileResponse> reconcileIds(@Query("conversationId") String conversationId);
+
+    class ReconcileResponse {
+        public List<String> msgUuids;
+    }
 
     /**
      * Delivery acknowledgment: confirm that pulled messages have been

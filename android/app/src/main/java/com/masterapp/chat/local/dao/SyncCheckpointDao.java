@@ -23,16 +23,23 @@ public interface SyncCheckpointDao {
     @Query("SELECT lastPulledSeq FROM sync_checkpoints WHERE conversationId = :convId")
     Long getLastPulledSeq(String convId);
 
-    @Query("UPDATE sync_checkpoints SET lastPulledSeq = :seq, updatedAt = :now WHERE conversationId = :convId")
-    void updatePulledSeq(String convId, long seq, long now);
+    @Query("SELECT lastPulledAt FROM sync_checkpoints WHERE conversationId = :convId")
+    Long getLastPulledAt(String convId);
+
+    @Query("UPDATE sync_checkpoints SET lastPulledSeq = :seq, lastPulledAt = :pulledAt, updatedAt = :now WHERE conversationId = :convId")
+    void updatePulledCheckpoint(String convId, long seq, long pulledAt, long now);
 
     @Query("UPDATE sync_checkpoints SET lastPushedAt = :now, updatedAt = :now WHERE conversationId = :convId")
     void updatePushedAt(String convId, long now);
 
     /** Initialize a checkpoint for a conversation if it doesn't exist */
-    @Query("INSERT OR IGNORE INTO sync_checkpoints (conversationId, lastPulledSeq, lastPushedAt, updatedAt) VALUES (:convId, 0, 0, :now)")
+    @Query("INSERT OR IGNORE INTO sync_checkpoints (conversationId, lastPulledSeq, lastPulledAt, lastPushedAt, updatedAt) VALUES (:convId, 0, 0, 0, :now)")
     void ensureExists(String convId, long now);
 
     @Query("DELETE FROM sync_checkpoints WHERE conversationId = :convId")
     void deleteCheckpoint(String convId);
+
+    // Delete all checkpoints (used for cache recovery reset)
+    @Query("DELETE FROM sync_checkpoints")
+    void deleteAll();
 }

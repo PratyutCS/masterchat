@@ -50,7 +50,7 @@ public class ReadSyncWorker extends Worker {
 
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
         ReadOutboxDao outboxDao = db.readOutboxDao();
-        SyncApi syncApi = ApiClient.getInstance(getApplicationContext()).create(SyncApi.class);
+        SyncApi syncApi = ApiClient.getSyncApi();
 
         // Fetch all pending read watermarks
         List<ReadOutbox> pending = outboxDao.getPendingReadEvents();
@@ -72,12 +72,8 @@ public class ReadSyncWorker extends Worker {
             if (response.isSuccessful() && response.body() != null) {
                 Log.d(TAG, "Read ack success: " + response.body().acked + " conversations");
 
-                // Mark all as acked
-                List<String> ackedIds = new ArrayList<>();
-                for (ReadOutbox entry : pending) {
-                    ackedIds.add(entry.conversationId);
-                }
-                outboxDao.markAckedBatch(ackedIds);
+                // Mark all as acked using sequence-aware safe method
+                outboxDao.markAckedBatchSafe(pending);
 
                 return Result.success();
             } else {

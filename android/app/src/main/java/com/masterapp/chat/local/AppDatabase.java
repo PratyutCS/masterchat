@@ -10,12 +10,14 @@ import com.masterapp.chat.local.dao.MessageDao;
 import com.masterapp.chat.local.dao.ReadOutboxDao;
 import com.masterapp.chat.local.dao.SyncCheckpointDao;
 import com.masterapp.chat.local.dao.ConversationDao;
+import com.masterapp.chat.local.dao.SyncQueueDao;
 import com.masterapp.chat.local.entity.MessageEntity;
 import com.masterapp.chat.local.entity.ReadOutbox;
 import com.masterapp.chat.local.entity.SyncCheckpoint;
 import com.masterapp.chat.local.entity.ConversationEntity;
+import com.masterapp.chat.local.entity.SyncQueueEntity;
 
-@Database(entities = {MessageEntity.class, SyncCheckpoint.class, ReadOutbox.class, ConversationEntity.class}, version = 6, exportSchema = false)
+@Database(entities = {MessageEntity.class, SyncCheckpoint.class, ReadOutbox.class, ConversationEntity.class, SyncQueueEntity.class}, version = 12, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
@@ -24,6 +26,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SyncCheckpointDao syncCheckpointDao();
     public abstract ReadOutboxDao readOutboxDao();
     public abstract ConversationDao conversationDao();
+    public abstract SyncQueueDao syncQueueDao();
 
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {

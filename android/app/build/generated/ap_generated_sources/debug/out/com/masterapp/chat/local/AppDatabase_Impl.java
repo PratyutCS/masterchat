@@ -19,6 +19,8 @@ import com.masterapp.chat.local.dao.ReadOutboxDao;
 import com.masterapp.chat.local.dao.ReadOutboxDao_Impl;
 import com.masterapp.chat.local.dao.SyncCheckpointDao;
 import com.masterapp.chat.local.dao.SyncCheckpointDao_Impl;
+import com.masterapp.chat.local.dao.SyncQueueDao;
+import com.masterapp.chat.local.dao.SyncQueueDao_Impl;
 import java.lang.Class;
 import java.lang.Override;
 import java.lang.String;
@@ -42,18 +44,21 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   private volatile ConversationDao _conversationDao;
 
+  private volatile SyncQueueDao _syncQueueDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(6) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(12) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`msgUuid` TEXT NOT NULL, `conversationId` TEXT, `text` TEXT, `senderId` TEXT, `sequenceId` INTEGER, `status` TEXT, `localTimestamp` INTEGER NOT NULL, `sentAt` TEXT, `readAt` TEXT, PRIMARY KEY(`msgUuid`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `sync_checkpoints` (`conversationId` TEXT NOT NULL, `lastPulledSeq` INTEGER NOT NULL, `lastPushedAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`conversationId`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`msgUuid` TEXT NOT NULL, `conversationId` TEXT, `text` TEXT, `senderId` TEXT, `sequenceId` INTEGER, `status` TEXT, `localTimestamp` INTEGER NOT NULL, `sentAt` TEXT, `readAt` TEXT, `receiverId` TEXT, `content` TEXT, `deliveredAt` TEXT, `seenAt` TEXT, `isRead` INTEGER NOT NULL, `updatedAt` TEXT, PRIMARY KEY(`msgUuid`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `sync_checkpoints` (`conversationId` TEXT NOT NULL, `lastPulledSeq` INTEGER NOT NULL, `lastPulledAt` INTEGER NOT NULL, `lastPushedAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`conversationId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `read_outbox` (`conversationId` TEXT NOT NULL, `maxSequenceId` INTEGER NOT NULL, `localTimestamp` INTEGER NOT NULL, `synced` INTEGER NOT NULL, PRIMARY KEY(`conversationId`))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `conversations` (`id` TEXT NOT NULL, `title` TEXT, `lastMessage` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `conversations` (`id` TEXT NOT NULL, `title` TEXT, `otherUserId` TEXT, `lastMessage` TEXT, `unreadCount` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `sync_queue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `entityId` TEXT NOT NULL, `operation` TEXT NOT NULL, `retryCount` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '235b0dc4121bcd9adb6b7bae2c836ad3')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2d89cf08b1e2c69a44c3189ffe21b851')");
       }
 
       @Override
@@ -62,6 +67,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("DROP TABLE IF EXISTS `sync_checkpoints`");
         db.execSQL("DROP TABLE IF EXISTS `read_outbox`");
         db.execSQL("DROP TABLE IF EXISTS `conversations`");
+        db.execSQL("DROP TABLE IF EXISTS `sync_queue`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -105,7 +111,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       @NonNull
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsMessages = new HashMap<String, TableInfo.Column>(9);
+        final HashMap<String, TableInfo.Column> _columnsMessages = new HashMap<String, TableInfo.Column>(15);
         _columnsMessages.put("msgUuid", new TableInfo.Column("msgUuid", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("conversationId", new TableInfo.Column("conversationId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("text", new TableInfo.Column("text", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -115,6 +121,12 @@ public final class AppDatabase_Impl extends AppDatabase {
         _columnsMessages.put("localTimestamp", new TableInfo.Column("localTimestamp", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("sentAt", new TableInfo.Column("sentAt", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("readAt", new TableInfo.Column("readAt", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("receiverId", new TableInfo.Column("receiverId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("content", new TableInfo.Column("content", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("deliveredAt", new TableInfo.Column("deliveredAt", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("seenAt", new TableInfo.Column("seenAt", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("isRead", new TableInfo.Column("isRead", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("updatedAt", new TableInfo.Column("updatedAt", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysMessages = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesMessages = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoMessages = new TableInfo("messages", _columnsMessages, _foreignKeysMessages, _indicesMessages);
@@ -124,9 +136,10 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoMessages + "\n"
                   + " Found:\n" + _existingMessages);
         }
-        final HashMap<String, TableInfo.Column> _columnsSyncCheckpoints = new HashMap<String, TableInfo.Column>(4);
+        final HashMap<String, TableInfo.Column> _columnsSyncCheckpoints = new HashMap<String, TableInfo.Column>(5);
         _columnsSyncCheckpoints.put("conversationId", new TableInfo.Column("conversationId", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSyncCheckpoints.put("lastPulledSeq", new TableInfo.Column("lastPulledSeq", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSyncCheckpoints.put("lastPulledAt", new TableInfo.Column("lastPulledAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSyncCheckpoints.put("lastPushedAt", new TableInfo.Column("lastPushedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSyncCheckpoints.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysSyncCheckpoints = new HashSet<TableInfo.ForeignKey>(0);
@@ -152,10 +165,12 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoReadOutbox + "\n"
                   + " Found:\n" + _existingReadOutbox);
         }
-        final HashMap<String, TableInfo.Column> _columnsConversations = new HashMap<String, TableInfo.Column>(4);
+        final HashMap<String, TableInfo.Column> _columnsConversations = new HashMap<String, TableInfo.Column>(6);
         _columnsConversations.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsConversations.put("title", new TableInfo.Column("title", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsConversations.put("otherUserId", new TableInfo.Column("otherUserId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsConversations.put("lastMessage", new TableInfo.Column("lastMessage", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsConversations.put("unreadCount", new TableInfo.Column("unreadCount", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsConversations.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysConversations = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesConversations = new HashSet<TableInfo.Index>(0);
@@ -166,9 +181,24 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoConversations + "\n"
                   + " Found:\n" + _existingConversations);
         }
+        final HashMap<String, TableInfo.Column> _columnsSyncQueue = new HashMap<String, TableInfo.Column>(5);
+        _columnsSyncQueue.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSyncQueue.put("entityId", new TableInfo.Column("entityId", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSyncQueue.put("operation", new TableInfo.Column("operation", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSyncQueue.put("retryCount", new TableInfo.Column("retryCount", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSyncQueue.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysSyncQueue = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesSyncQueue = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoSyncQueue = new TableInfo("sync_queue", _columnsSyncQueue, _foreignKeysSyncQueue, _indicesSyncQueue);
+        final TableInfo _existingSyncQueue = TableInfo.read(db, "sync_queue");
+        if (!_infoSyncQueue.equals(_existingSyncQueue)) {
+          return new RoomOpenHelper.ValidationResult(false, "sync_queue(com.masterapp.chat.local.entity.SyncQueueEntity).\n"
+                  + " Expected:\n" + _infoSyncQueue + "\n"
+                  + " Found:\n" + _existingSyncQueue);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "235b0dc4121bcd9adb6b7bae2c836ad3", "83432a8af93b9644ae07b2a34c552007");
+    }, "2d89cf08b1e2c69a44c3189ffe21b851", "4ed88eba873a9197796e808f7cb80a67");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -179,7 +209,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "messages","sync_checkpoints","read_outbox","conversations");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "messages","sync_checkpoints","read_outbox","conversations","sync_queue");
   }
 
   @Override
@@ -192,6 +222,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       _db.execSQL("DELETE FROM `sync_checkpoints`");
       _db.execSQL("DELETE FROM `read_outbox`");
       _db.execSQL("DELETE FROM `conversations`");
+      _db.execSQL("DELETE FROM `sync_queue`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -210,6 +241,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     _typeConvertersMap.put(SyncCheckpointDao.class, SyncCheckpointDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(ReadOutboxDao.class, ReadOutboxDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(ConversationDao.class, ConversationDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(SyncQueueDao.class, SyncQueueDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -280,6 +312,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _conversationDao = new ConversationDao_Impl(this);
         }
         return _conversationDao;
+      }
+    }
+  }
+
+  @Override
+  public SyncQueueDao syncQueueDao() {
+    if (_syncQueueDao != null) {
+      return _syncQueueDao;
+    } else {
+      synchronized(this) {
+        if(_syncQueueDao == null) {
+          _syncQueueDao = new SyncQueueDao_Impl(this);
+        }
+        return _syncQueueDao;
       }
     }
   }

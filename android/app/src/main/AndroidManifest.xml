@@ -30,5 +30,13 @@
         <activity android:name=".ui.RegisterActivity" />
         <activity android:name=".ui.ConversationListActivity" />
         <activity android:name=".ui.ChatActivity" />
+
+        <service
+            android:name=".fcm.ChatFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.messaging.EVENT" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

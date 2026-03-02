@@ -116,6 +116,22 @@ public class LoginActivity extends AppCompatActivity {
         SocketManager.getInstance().connect();
         SocketManager.getInstance().authenticate(tokenManager.getToken());
 
+        // Register FCM token if it exists
+        String fcmToken = getSharedPreferences(com.masterapp.chat.util.Constants.PREFS_NAME, MODE_PRIVATE)
+                .getString("fcm_token", null);
+        if (fcmToken != null) {
+            new Thread(() -> {
+                try {
+                    ApiClient.getAuthApi()
+                            .registerFcmToken(new com.masterapp.chat.api.AuthApi.FcmTokenRequest(fcmToken))
+                            .execute();
+                } catch (Exception ignore) {}
+            }).start();
+        }
+
+        // Start the Clock-Ticking Async Worker
+        com.masterapp.chat.sync.SyncScheduler.startHeartbeat(this);
+
         // Navigate to conversation list
         Intent intent = new Intent(this, ConversationListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

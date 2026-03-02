@@ -15,13 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.masterapp.chat.R;
+import com.masterapp.chat.local.entity.ConversationEntity;
 import com.masterapp.chat.models.Conversation;
+import com.masterapp.chat.models.Message;
 import com.masterapp.chat.models.User;
 import com.masterapp.chat.socket.SocketManager;
 import com.masterapp.chat.ui.adapter.ConversationAdapter;
 import com.masterapp.chat.util.TokenManager;
 import com.masterapp.chat.viewmodel.ConversationListViewModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,31 +77,37 @@ public class ConversationListActivity extends AppCompatActivity
         // New chat button
         findViewById(R.id.fab_new_chat).setOnClickListener(v -> showNewChatDialog());
 
-        // Observe live data from server fetch
-        viewModel.getConversations().observe(this, newData -> {
+        // Initialize chat list from Room
+        viewModel.getLocalConversations().observe(this, entities -> {
             progressBar.setVisibility(View.GONE);
-            if (newData != null) {
-                adapter.setConversations(newData);
+            if (entities == null) return;
+            
+            List<Conversation> uiModels = new ArrayList<>();
+            for (ConversationEntity entity : entities) {
+                if (entity == null) continue;
+                Conversation conv = new Conversation();
+                conv.setId(entity.id);
+                
+                User other = new User();
+                other.setUsername(entity.title);
+                other.setId(entity.otherUserId); 
+                
+                User me = new User();
+                me.setId(tokenManager.getUserId());
+                conv.setMembers(Arrays.asList(me, other));
+                
+                Message lastMsg = new Message();
+                lastMsg.setText(entity.lastMessage);
+                conv.setLastMessage(lastMsg);
+                conv.setUnreadCount(entity.unreadCount);
+                
+                uiModels.add(conv);
             }
+            adapter.setConversations(uiModels);
         });
 
+        // Trigger the initial master sync
         viewModel.refreshConversations();
-        
-        // Listen for global socket events via stable LiveData bus
-        SocketManager.getInstance().getNewMessageEvents().observe(this, data -> {
-            android.util.Log.d("ConvList", "Dashboard refreshing: New message available");
-            viewModel.refreshConversations();
-        });
-
-        SocketManager.getInstance().getMessageReadEvents().observe(this, data -> {
-            android.util.Log.d("ConvList", "Dashboard refreshing: Messages read");
-            viewModel.refreshConversations();
-        });
-
-        SocketManager.getInstance().getMessageDeliveredEvents().observe(this, data -> {
-            android.util.Log.d("ConvList", "Dashboard refreshing: Messages delivered");
-            viewModel.refreshConversations();
-        });
     }
 
     @Override
@@ -163,6 +173,12 @@ public class ConversationListActivity extends AppCompatActivity
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("conversationId", conversation.getId());
         intent.putExtra("otherUsername", otherUsername);
+        
+        User other = conversation.getOtherMember(tokenManager.getUserId());
+        if (other != null) {
+            intent.putExtra("otherUserId", other.getId());
+        }
+        
         startActivity(intent);
     }
 

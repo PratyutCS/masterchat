@@ -10,12 +10,14 @@ import androidx.room.RoomSQLiteQuery;
 import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
+import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.masterapp.chat.local.entity.ConversationEntity;
 import java.lang.Class;
 import java.lang.Exception;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.StringBuilder;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +34,15 @@ public final class ConversationDao_Impl implements ConversationDao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteById;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
+
   public ConversationDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfConversationEntity = new EntityInsertionAdapter<ConversationEntity>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `conversations` (`id`,`title`,`lastMessage`,`updatedAt`) VALUES (?,?,?,?)";
+        return "INSERT OR REPLACE INTO `conversations` (`id`,`title`,`otherUserId`,`lastMessage`,`unreadCount`,`updatedAt`) VALUES (?,?,?,?,?,?)";
       }
 
       @Override
@@ -54,12 +58,18 @@ public final class ConversationDao_Impl implements ConversationDao {
         } else {
           statement.bindString(2, entity.title);
         }
-        if (entity.lastMessage == null) {
+        if (entity.otherUserId == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.lastMessage);
+          statement.bindString(3, entity.otherUserId);
         }
-        statement.bindLong(4, entity.updatedAt);
+        if (entity.lastMessage == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, entity.lastMessage);
+        }
+        statement.bindLong(5, entity.unreadCount);
+        statement.bindLong(6, entity.updatedAt);
       }
     };
     this.__preparedStmtOfDeleteById = new SharedSQLiteStatement(__db) {
@@ -67,6 +77,14 @@ public final class ConversationDao_Impl implements ConversationDao {
       @NonNull
       public String createQuery() {
         final String _query = "DELETE FROM conversations WHERE id = ?";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM conversations";
         return _query;
       }
     };
@@ -108,6 +126,23 @@ public final class ConversationDao_Impl implements ConversationDao {
   }
 
   @Override
+  public void deleteAll() {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+    try {
+      __db.beginTransaction();
+      try {
+        _stmt.executeUpdateDelete();
+        __db.setTransactionSuccessful();
+      } finally {
+        __db.endTransaction();
+      }
+    } finally {
+      __preparedStmtOfDeleteAll.release(_stmt);
+    }
+  }
+
+  @Override
   public LiveData<List<ConversationEntity>> getAllConversations() {
     final String _sql = "SELECT * FROM conversations ORDER BY updatedAt DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -119,7 +154,9 @@ public final class ConversationDao_Impl implements ConversationDao {
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfTitle = CursorUtil.getColumnIndexOrThrow(_cursor, "title");
+          final int _cursorIndexOfOtherUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "otherUserId");
           final int _cursorIndexOfLastMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "lastMessage");
+          final int _cursorIndexOfUnreadCount = CursorUtil.getColumnIndexOrThrow(_cursor, "unreadCount");
           final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
           final List<ConversationEntity> _result = new ArrayList<ConversationEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -136,15 +173,23 @@ public final class ConversationDao_Impl implements ConversationDao {
             } else {
               _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
             }
+            final String _tmpOtherUserId;
+            if (_cursor.isNull(_cursorIndexOfOtherUserId)) {
+              _tmpOtherUserId = null;
+            } else {
+              _tmpOtherUserId = _cursor.getString(_cursorIndexOfOtherUserId);
+            }
             final String _tmpLastMessage;
             if (_cursor.isNull(_cursorIndexOfLastMessage)) {
               _tmpLastMessage = null;
             } else {
               _tmpLastMessage = _cursor.getString(_cursorIndexOfLastMessage);
             }
+            final int _tmpUnreadCount;
+            _tmpUnreadCount = _cursor.getInt(_cursorIndexOfUnreadCount);
             final long _tmpUpdatedAt;
             _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
-            _item = new ConversationEntity(_tmpId,_tmpTitle,_tmpLastMessage,_tmpUpdatedAt);
+            _item = new ConversationEntity(_tmpId,_tmpTitle,_tmpOtherUserId,_tmpLastMessage,_tmpUnreadCount,_tmpUpdatedAt);
             _result.add(_item);
           }
           return _result;
@@ -158,6 +203,92 @@ public final class ConversationDao_Impl implements ConversationDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public List<ConversationEntity> getAllConversationsSync() {
+    final String _sql = "SELECT * FROM conversations";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfTitle = CursorUtil.getColumnIndexOrThrow(_cursor, "title");
+      final int _cursorIndexOfOtherUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "otherUserId");
+      final int _cursorIndexOfLastMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "lastMessage");
+      final int _cursorIndexOfUnreadCount = CursorUtil.getColumnIndexOrThrow(_cursor, "unreadCount");
+      final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
+      final List<ConversationEntity> _result = new ArrayList<ConversationEntity>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final ConversationEntity _item;
+        final String _tmpId;
+        if (_cursor.isNull(_cursorIndexOfId)) {
+          _tmpId = null;
+        } else {
+          _tmpId = _cursor.getString(_cursorIndexOfId);
+        }
+        final String _tmpTitle;
+        if (_cursor.isNull(_cursorIndexOfTitle)) {
+          _tmpTitle = null;
+        } else {
+          _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+        }
+        final String _tmpOtherUserId;
+        if (_cursor.isNull(_cursorIndexOfOtherUserId)) {
+          _tmpOtherUserId = null;
+        } else {
+          _tmpOtherUserId = _cursor.getString(_cursorIndexOfOtherUserId);
+        }
+        final String _tmpLastMessage;
+        if (_cursor.isNull(_cursorIndexOfLastMessage)) {
+          _tmpLastMessage = null;
+        } else {
+          _tmpLastMessage = _cursor.getString(_cursorIndexOfLastMessage);
+        }
+        final int _tmpUnreadCount;
+        _tmpUnreadCount = _cursor.getInt(_cursorIndexOfUnreadCount);
+        final long _tmpUpdatedAt;
+        _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
+        _item = new ConversationEntity(_tmpId,_tmpTitle,_tmpOtherUserId,_tmpLastMessage,_tmpUnreadCount,_tmpUpdatedAt);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public void deleteConversationsNotInList(final List<String> ids) {
+    __db.assertNotSuspendingTransaction();
+    final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
+    _stringBuilder.append("DELETE FROM conversations WHERE id NOT IN (");
+    final int _inputSize = ids == null ? 1 : ids.size();
+    StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
+    _stringBuilder.append(")");
+    final String _sql = _stringBuilder.toString();
+    final SupportSQLiteStatement _stmt = __db.compileStatement(_sql);
+    int _argIndex = 1;
+    if (ids == null) {
+      _stmt.bindNull(_argIndex);
+    } else {
+      for (String _item : ids) {
+        if (_item == null) {
+          _stmt.bindNull(_argIndex);
+        } else {
+          _stmt.bindString(_argIndex, _item);
+        }
+        _argIndex++;
+      }
+    }
+    __db.beginTransaction();
+    try {
+      _stmt.executeUpdateDelete();
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
   }
 
   @NonNull

@@ -20,4 +20,13 @@ public interface AuthApi {
     /** Login with email + password */
     @POST("/api/auth/login")
     Call<AuthResponse> login(@Body LoginRequest request);
+
+    /** Register FCM token for push notifications */
+    @POST("/api/auth/fcm-token")
+    Call<okhttp3.ResponseBody> registerFcmToken(@Body FcmTokenRequest request);
+
+    class FcmTokenRequest {
+        public String token;
+        public FcmTokenRequest(String token) { this.token = token; }
+    }
 }

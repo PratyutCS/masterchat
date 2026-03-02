@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.masterapp.chat.app-mergeDebugResources-36:/values-v28/values-v28.xml",
+            "outputFile": "com.masterapp.chat.app-mergeDebugResources-40:/values-v28/values-v28.xml",
             "map": [
                 {
                     "source": "/home/pratyut/.gradle/caches/9.2.1/transforms/8b95ee18d9915621e92e49bffdc4caca/transformed/material-1.11.0/res/values-v28/values-v28.xml",

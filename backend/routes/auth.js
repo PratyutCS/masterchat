@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -90,6 +91,35 @@ router.post('/login', async (req, res) => {
         res.json({ token, user });
     } catch (error) {
         console.error('Login error:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+/**
+ * POST /api/auth/fcm-token
+ * 
+ * Body: { token }
+ * Registers the device's FCM push token for the authenticated user.
+ * Protected route — requires JWT.
+ */
+router.post('/fcm-token', auth, async (req, res) => {
+    try {
+        const { token } = req.body;
+        if (!token) {
+            return res.status(400).json({ error: 'Token is required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.fcmToken = token;
+        await user.save();
+
+        res.json({ message: 'FCM token registered successfully' });
+    } catch (error) {
+        console.error('FCM token registration error:', error.message);
         res.status(500).json({ error: 'Server error' });
     }
 });

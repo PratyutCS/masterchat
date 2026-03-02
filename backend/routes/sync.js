@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
+const ReadWatermark = require('../models/ReadWatermark');
 
 // Dependency injection workaround for Socket.IO (will be passed from server.js if needed, or we can require global io)
 // For simplicity, we assume `req.app.get('io')` is accessible to emit events.
@@ -15,83 +16,93 @@ const Conversation = require('../models/Conversation');
  */
 router.post('/messages', auth, async (req, res) => {
     try {
-        const messages = req.body; // Array of pending message objects
+        const messages = req.body;
         if (!Array.isArray(messages) || messages.length === 0) {
-            return res.status(400).json({ msg: 'Expected a non-empty array of messages' });
+            return res.status(400).json({ error: 'Expected a non-empty array of messages' });
         }
 
         const io = req.app.get('io');
         const results = [];
 
-        // Process messages sequentially to assign monotonic sequence IDs per conversation.
-        // In a highly concurrent MongoDB system, we must lock or use atomic operations.
+        // 1. Group messages by conversationId for efficient sequence updates
+        const groups = {};
         for (const msg of messages) {
-            const { msgUuid, conversationId, text, clientTimestamp } = msg;
+            if (!msg.conversationId || !msg.msgUuid) continue;
+            if (!groups[msg.conversationId]) groups[msg.conversationId] = [];
+            groups[msg.conversationId].push(msg);
+        }
 
-            // 1. Check if message already exists (idempotency key)
-            const existingMsg = await Message.findOne({ msgUuid });
-            if (existingMsg) {
-                results.push(existingMsg);
-                continue; // Already processed, return it
-            }
+        // 2. Process each conversation group atomically
+        for (const convId of Object.keys(groups)) {
+            const convMessages = groups[convId];
+            const count = convMessages.length;
 
-            // 2. Atomically increment the sequence ID for this conversation
+            // Atomically allocate a block of sequence IDs
             const conversation = await Conversation.findOneAndUpdate(
-                { _id: conversationId, members: req.user.id },
+                { _id: convId, members: req.user.id },
                 {
-                    $inc: { lastSequenceId: 1 },
+                    $inc: { lastSequenceId: count },
                     $set: { updatedAt: new Date() }
                 },
-                { new: true } // Return updated doc
+                { new: true }
             );
 
             if (!conversation) {
-                // Ignore if user isn't part of convo
+                console.warn(`Sync warning: User ${req.user.id} attempted to sync to conversation ${convId} but is not a member or it doesn't exist.`);
                 continue;
             }
 
-            // 3. Create and save the message
-            const newMsg = new Message({
-                conversationId,
-                msgUuid,
-                sequenceId: conversation.lastSequenceId,
-                senderId: req.user.id,
-                text,
-                clientTimestamp: clientTimestamp || new Date(),
-                sentAt: new Date(),
-                status: 'sent'
-            });
+            // The last assigned sequence ID on the server
+            const baseSeq = conversation.lastSequenceId - count;
+            const otherUser = conversation.members.find(m => m.toString() !== req.user.id);
 
-            await newMsg.save();
-            results.push(newMsg);
+            for (let i = 0; i < count; i++) {
+                const msg = convMessages[i];
+                const seq = baseSeq + i + 1;
 
-            // 4. Emit silent push / socket event to room
-            if (io) {
-                // Notify the conversation room (for users currently IN the chat)
-                const room = conversationId.toString();
-                io.to(room).emit('new_message_available', {
-                    conversationId,
-                    sequenceId: newMsg.sequenceId
+                // Idempotency: skip if msgUuid exists
+                const existing = await Message.findOne({ msgUuid: msg.msgUuid });
+                if (existing) {
+                    results.push(existing);
+                    continue;
+                }
+
+                const newMsg = new Message({
+                    _id: msg.msgUuid, // Explicitly set _id to the client UUID for schema consistency
+                    msgUuid: msg.msgUuid,
+                    conversationId: convId,
+                    sequenceId: seq,
+                    senderId: req.user.id,
+                    receiverId: otherUser || null,
+                    text: msg.text,
+                    clientTimestamp: msg.clientTimestamp || new Date(),
+                    sentAt: new Date(),
+                    status: 'sent'
                 });
 
-                // Notify individual members (for users on the Dashboard/Conversation List)
-                const recipients = conversation.members.filter(m => m.toString() !== req.user.id);
-                recipients.forEach(recipientId => {
-                    const roomName = `user_${recipientId.toString()}`;
-                    console.log(`Pushed global notification to recipient: ${roomName}`);
-                    io.to(roomName).emit('new_message_available', {
-                        conversationId: conversationId.toString(),
-                        sequenceId: newMsg.sequenceId
-                    });
-                });
+                await newMsg.save();
+                results.push(newMsg);
+
+                // Fan out notification via Socket.IO
+                if (io) {
+                    // Update the generic "something changed" event
+                    io.to(convId).emit('new_message_available', { conversationId: convId, sequenceId: seq });
+
+                    // Specific dashboard update for recipients
+                    if (otherUser) {
+                        io.to(`user_${otherUser.toString()}`).emit('new_message_available', {
+                            conversationId: convId,
+                            sequenceId: seq
+                        });
+                    }
+                }
             }
         }
 
-        // Return authoritative state back to the sending client
         res.json(results);
     } catch (err) {
-        console.error('Error in batch sync upstream:', err.message);
-        res.status(500).send('Server error');
+        console.error('Batch sync failure:', err);
+        res.status(500).json({ error: 'Internal server error during sync' });
     }
 });
 
@@ -104,13 +115,14 @@ router.post('/messages', auth, async (req, res) => {
  */
 router.get('/messages', auth, async (req, res) => {
     try {
-        const { conversationId, afterSequenceId } = req.query;
+        const { conversationId, afterSequenceId, updatedAfter } = req.query;
 
         if (!conversationId) {
             return res.status(400).json({ msg: 'conversationId required' });
         }
 
         const seqId = parseInt(afterSequenceId, 10) || 0;
+        const lastUpdate = updatedAfter ? new Date(updatedAfter) : new Date(0);
 
         // Ensure user is part of the conversation
         const conversation = await Conversation.findOne({
@@ -122,13 +134,16 @@ router.get('/messages', auth, async (req, res) => {
             return res.status(404).json({ msg: 'Conversation not found' });
         }
 
-        // Fetch messages strictly greater than afterSequenceId
+        // Fetch messages that are either NEW (seqId) OR UPDATED (lastUpdate)
         const messages = await Message.find({
             conversationId,
-            sequenceId: { $gt: seqId }
+            $or: [
+                { sequenceId: { $gt: seqId } },
+                { updatedAt: { $gt: lastUpdate } }
+            ]
         })
             .sort({ sequenceId: 1 })
-            .limit(200); // Batch limit
+            .limit(200);
 
         res.json(messages);
     } catch (err) {
@@ -170,32 +185,32 @@ router.post('/ack', auth, async (req, res) => {
                 conversationId,
                 senderId: { $ne: req.user.id },
                 sequenceId: { $lte: maxSequenceId },
-                status: 'sent'
+                $or: [
+                    { status: 'sent' },
+                    { status: 'delivered', deliveredAt: null }
+                ]
             },
-            { $set: { status: 'delivered' } }
+            { $set: { status: 'delivered', deliveredAt: new Date() } }
         );
 
         // If we updated any messages, notify the sender
         if (deliveredResult.modifiedCount > 0) {
             const io = req.app.get('io');
             if (io) {
-                const lastMsg = await Message.findOne({ conversationId })
-                    .sort({ sequenceId: -1 });
-
-                // Notify sender's personal room (dashboard updates)
-                const senderRoom = conversation.members.find(m => m.toString() !== req.user.id);
-                if (senderRoom) {
-                    io.to(`user_${senderRoom.toString()}`).emit('message_delivered', {
+                // Determine who should receive the delivery update (the sender of the original messages)
+                const originalSender = conversation.members.find(m => m.toString() !== req.user.id);
+                if (originalSender) {
+                    const payload = {
                         conversationId: conversationId.toString(),
-                        sequenceId: lastMsg ? lastMsg.sequenceId : 0
-                    });
-                }
+                        sequenceId: maxSequenceId
+                    };
 
-                // Notify conversation room (in-chat updates)
-                io.to(conversationId.toString()).emit('message_delivered', {
-                    conversationId: conversationId.toString(),
-                    sequenceId: lastMsg ? lastMsg.sequenceId : 0
-                });
+                    // Notify sender's personal room (for dashboard view)
+                    io.to(`user_${originalSender.toString()}`).emit('message_delivered', payload);
+
+                    // Notify conversation room (for active chat view)
+                    io.to(conversationId.toString()).emit('message_delivered', payload);
+                }
             }
         }
 
@@ -238,7 +253,6 @@ router.post('/read-ack', auth, async (req, res) => {
             if (!conversation) continue;
 
             // 2. Upsert ReadWatermark (Monotonic MAX)
-            const ReadWatermark = require('../models/ReadWatermark');
             const watermark = await ReadWatermark.findOneAndUpdate(
                 { conversationId, userId: req.user.id },
                 { $max: { readUpToSeq: maxSequenceId } },
@@ -253,7 +267,7 @@ router.post('/read-ack', auth, async (req, res) => {
                     sequenceId: { $lte: watermark.readUpToSeq },
                     status: { $ne: 'read' }
                 },
-                { $set: { status: 'read', readAt: new Date() } }
+                { $set: { status: 'read', readAt: new Date(), deliveredAt: new Date() } }
             );
 
             // 4. If any messages were newly marked read, fanout via Socket.IO
@@ -308,8 +322,6 @@ router.get('/watermarks', auth, async (req, res) => {
             return res.status(404).json({ msg: 'Conversation not found' });
         }
 
-        const ReadWatermark = require('../models/ReadWatermark');
-
         // Fetch all watermarks for this conversation (for both users)
         const watermarks = await ReadWatermark.find({ conversationId });
 
@@ -317,6 +329,28 @@ router.get('/watermarks', auth, async (req, res) => {
     } catch (err) {
         console.error('Error fetching watermarks:', err.message);
         res.status(500).send('Server error');
+    }
+});
+
+/**
+ * RECONCILIATION: Verify existence of messages
+ * GET /api/sync/reconcile-ids?conversationId=XYZ
+ * 
+ * Returns all valid message UUIDs for a conversation.
+ * Client uses this to delete local messages that were hard-deleted on server.
+ */
+router.get('/reconcile-ids', auth, async (req, res) => {
+    try {
+        const { conversationId } = req.query;
+        if (!conversationId) return res.status(400).json({ error: 'conversationId required' });
+
+        const conversation = await Conversation.findOne({ _id: conversationId, members: req.user.id });
+        if (!conversation) return res.status(404).json({ error: 'Conversation not found' });
+
+        const ids = await Message.find({ conversationId }).distinct('msgUuid');
+        res.json({ msgUuids: ids });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 

@@ -18,6 +18,16 @@ public interface ConversationDao {
     @Query("SELECT * FROM conversations ORDER BY updatedAt DESC")
     LiveData<List<ConversationEntity>> getAllConversations();
 
+    @Query("SELECT * FROM conversations")
+    List<ConversationEntity> getAllConversationsSync();
+
+    @Query("DELETE FROM conversations WHERE id NOT IN (:ids)")
+    void deleteConversationsNotInList(List<String> ids);
+
     @Query("DELETE FROM conversations WHERE id = :id")
     void deleteById(String id);
+
+    // Delete all conversations (used for cache recovery reset)
+    @Query("DELETE FROM conversations")
+    void deleteAll();
 }

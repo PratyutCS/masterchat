@@ -7,14 +7,12 @@ import androidx.room.RoomSQLiteQuery;
 import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
-import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.masterapp.chat.local.entity.ReadOutbox;
 import java.lang.Class;
 import java.lang.Long;
 import java.lang.Override;
 import java.lang.String;
-import java.lang.StringBuilder;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +44,7 @@ public final class ReadOutboxDao_Impl implements ReadOutboxDao {
       @Override
       @NonNull
       public String createQuery() {
-        final String _query = "UPDATE read_outbox SET synced = 1 WHERE conversationId = ?";
+        final String _query = "UPDATE read_outbox SET synced = 1 WHERE conversationId = ? AND maxSequenceId <= ?";
         return _query;
       }
     };
@@ -92,7 +90,7 @@ public final class ReadOutboxDao_Impl implements ReadOutboxDao {
   }
 
   @Override
-  public void markAcked(final String convId) {
+  public void markAcked(final String convId, final long ackSeqId) {
     __db.assertNotSuspendingTransaction();
     final SupportSQLiteStatement _stmt = __preparedStmtOfMarkAcked.acquire();
     int _argIndex = 1;
@@ -101,6 +99,8 @@ public final class ReadOutboxDao_Impl implements ReadOutboxDao {
     } else {
       _stmt.bindString(_argIndex, convId);
     }
+    _argIndex = 2;
+    _stmt.bindLong(_argIndex, ackSeqId);
     try {
       __db.beginTransaction();
       try {
@@ -200,38 +200,6 @@ public final class ReadOutboxDao_Impl implements ReadOutboxDao {
     } finally {
       _cursor.close();
       _statement.release();
-    }
-  }
-
-  @Override
-  public void markAckedBatch(final List<String> convIds) {
-    __db.assertNotSuspendingTransaction();
-    final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("UPDATE read_outbox SET synced = 1 WHERE conversationId IN (");
-    final int _inputSize = convIds == null ? 1 : convIds.size();
-    StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
-    _stringBuilder.append(")");
-    final String _sql = _stringBuilder.toString();
-    final SupportSQLiteStatement _stmt = __db.compileStatement(_sql);
-    int _argIndex = 1;
-    if (convIds == null) {
-      _stmt.bindNull(_argIndex);
-    } else {
-      for (String _item : convIds) {
-        if (_item == null) {
-          _stmt.bindNull(_argIndex);
-        } else {
-          _stmt.bindString(_argIndex, _item);
-        }
-        _argIndex++;
-      }
-    }
-    __db.beginTransaction();
-    try {
-      _stmt.executeUpdateDelete();
-      __db.setTransactionSuccessful();
-    } finally {
-      __db.endTransaction();
     }
   }
 

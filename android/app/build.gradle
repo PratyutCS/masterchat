@@ -17,6 +17,7 @@ android {
         // Use 10.0.2.2 for Android emulator (maps to host localhost)
         // Use your machine's LAN IP for a physical device
         buildConfigField "String", "BASE_URL", "\"http://10.50.43.149:5000\""
+//        buildConfigField "String", "BASE_URL", "\"http://192.168.1.49:5000\""
     }
 
     buildTypes {
@@ -67,4 +68,9 @@ dependencies {
 
     // WorkManager for background sync
     implementation "androidx.work:work-runtime:2.9.0"
+
+    // Firebase (Import the BoM)
+    implementation platform('com.google.firebase:firebase-bom:33.2.0')
+    // FCM (Cloud Messaging)
+    implementation 'com.google.firebase:firebase-messaging'
 }

@@ -25,6 +25,7 @@ const userRoutes = require('./routes/users');
 const conversationRoutes = require('./routes/conversations');
 const messageRoutes = require('./routes/messages');
 const syncRoutes = require('./routes/sync'); // Offline-first sync
+const adminRoutes = require('./routes/admin'); // Data Inspection Panel
 
 // Initialize Express app
 const app = express();
@@ -53,10 +54,15 @@ app.use('/api/users', userRoutes);
 app.use('/api/conversations', conversationRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/sync', syncRoutes);
+app.use('/api/admin', adminRoutes);
 
-// Health check endpoint
+// Health check & Admin Panel
 app.get('/', (req, res) => {
     res.json({ message: 'Chat API is running' });
+});
+
+app.get('/admin', (req, res) => {
+    res.sendFile(__dirname + '/public/admin.html');
 });
 
 // ----- Socket.IO Setup -----

@@ -20,15 +20,19 @@ public class SyncCheckpoint {
     /** The highest sequenceId we have successfully pulled from the server */
     public long lastPulledSeq;
 
+    /** Epoch millis of the last successful downstream pull from the server */
+    public long lastPulledAt;
+
     /** Epoch millis of the last successful upstream push for this conversation */
     public long lastPushedAt;
 
     /** Epoch millis of when this checkpoint was last updated */
     public long updatedAt;
 
-    public SyncCheckpoint(@NonNull String conversationId, long lastPulledSeq, long lastPushedAt, long updatedAt) {
+    public SyncCheckpoint(@NonNull String conversationId, long lastPulledSeq, long lastPulledAt, long lastPushedAt, long updatedAt) {
         this.conversationId = conversationId;
         this.lastPulledSeq = lastPulledSeq;
+        this.lastPulledAt = lastPulledAt;
         this.lastPushedAt = lastPushedAt;
         this.updatedAt = updatedAt;
     }

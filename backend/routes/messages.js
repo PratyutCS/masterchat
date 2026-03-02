@@ -2,8 +2,13 @@ const express = require('express');
 const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
 const auth = require('../middleware/auth');
+const messageController = require('../controllers/messageController');
 
 const router = express.Router();
+
+// Register batch and pull endpoints *before* the /:conversationId parameter route
+router.post('/batch', auth, messageController.syncBatchMessages);
+router.get('/updates', auth, messageController.getIncrementalUpdates);
 
 /**
  * GET /api/messages/:conversationId

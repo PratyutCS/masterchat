@@ -39,9 +39,11 @@ public class Conversation {
      * @return the other User, or null if not found
      */
     public User getOtherMember(String myUserId) {
-        if (members == null) return null;
+        if (members == null || myUserId == null) return null;
         for (User member : members) {
-            if (!member.getId().equals(myUserId)) {
+            if (member == null) continue;
+            String memberId = member.getId();
+            if (memberId != null && !memberId.equals(myUserId)) {
                 return member;
             }
         }

@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import com.google.gson.Gson;
 import com.masterapp.chat.repository.MessageRepository;
@@ -37,9 +36,13 @@ public class ChatViewModel extends AndroidViewModel {
     private final androidx.lifecycle.Observer<org.json.JSONObject> messageReadObserver;
     private final androidx.lifecycle.Observer<org.json.JSONObject> messageDeliveredObserver;
 
+    private MessageRepository messageRepository;
+    private boolean isPolling = false;
+
     public ChatViewModel(android.app.Application application) {
         super(application);
         dao = com.masterapp.chat.local.AppDatabase.getDatabase(application).messageDao();
+        messageRepository = new MessageRepository(application);
         
         // Retrieve current user ID from SharedPreferences for setting senderId
         myUserId = new com.masterapp.chat.util.TokenManager(application).getUserId();
@@ -50,35 +53,9 @@ public class ChatViewModel extends AndroidViewModel {
             triggerDownstreamSync();
         };
 
-        messageReadObserver = data -> {
-            if (data != null) {
-                String convId = data.optString("conversationId");
-                if (conversationId != null && conversationId.equals(convId)) {
-                    long maxSeq = data.optLong("sequenceId", -1);
-                    if (maxSeq != -1) {
-                        new Thread(() -> {
-                            dao.updateOtherUserReadWatermark(conversationId, maxSeq, "read", null, myUserId);
-                        }).start();
-                    } else {
-                        triggerDownstreamSync();
-                    }
-                }
-            }
-        };
-
-        messageDeliveredObserver = data -> {
-            if (data != null) {
-                String convId = data.optString("conversationId");
-                if (conversationId != null && conversationId.equals(convId)) {
-                    long maxSeq = data.optLong("sequenceId", -1);
-                    if (maxSeq != -1) {
-                        new Thread(() -> {
-                            dao.updateOtherUserReadWatermark(conversationId, maxSeq, "delivered", null, myUserId);
-                        }).start();
-                    }
-                }
-            }
-        };
+        // Status updates are now handled globally by StatusUpdateManager
+        messageReadObserver = data -> {};
+        messageDeliveredObserver = data -> {};
     }
 
     /** Expose messages as LiveData directly from Room! */
@@ -91,7 +68,7 @@ public class ChatViewModel extends AndroidViewModel {
 
         // 1. Observe strictly local SQLite data IMMEDIATELY
         // This ensures that even if user is offline, cached data shows up instantly
-        localMessages = dao.getMessagesForConversation(conversationId);
+        localMessages = messageRepository.getLocalMessages(conversationId);
 
         // 2. Join Socket room for typing indicators & silent push triggers
         socketManager.joinConversation(conversationId);
@@ -103,10 +80,16 @@ public class ChatViewModel extends AndroidViewModel {
 
         // Listen for typing events (Phase 2) - these are short lived, raw socket is okay
         socketManager.on("typing_start", args -> {
-            // ... (keep current logic)
+            // Typing indicators are short-lived UI state - using a simple flag
+            // In a production app, we might use a LiveData<Boolean> isTyping
+            Log.d(TAG, "Conversation partner started typing...");
+        });
+        
+        socketManager.on("typing_stop", args -> {
+            Log.d(TAG, "Conversation partner stopped typing");
         });
 
-        // Load complete historical messages once into SQLite
+        // Load historical messages from server once on entry
         triggerDownstreamSync();
     }
 
@@ -126,17 +109,13 @@ public class ChatViewModel extends AndroidViewModel {
 
                 checkpointDao.ensureExists(conversationId, System.currentTimeMillis());
                 Long checkpointSeq = checkpointDao.getLastPulledSeq(conversationId);
+                Long checkpointPulledAt = checkpointDao.getLastPulledAt(conversationId);
                 long afterSeq = checkpointSeq != null ? checkpointSeq : 0;
-
-                // Fallback: if checkpoint is 0 but we have local messages, use MAX(sequenceId)
-                if (afterSeq == 0) {
-                    Long highestId = dao.getHighestSequenceId(conversationId);
-                    if (highestId != null) afterSeq = highestId;
-                }
+                String updatedAfter = formatIso8601(checkpointPulledAt != null ? checkpointPulledAt : 0);
 
                 com.masterapp.chat.api.SyncApi api = com.masterapp.chat.api.ApiClient.getInstance(getApplication()).getSyncApi();
                 retrofit2.Response<java.util.List<com.masterapp.chat.local.entity.MessageEntity>> response =
-                    api.pullMessages(conversationId, afterSeq).execute();
+                    api.pullMessages(conversationId, afterSeq, updatedAfter).execute();
 
                 if (response.isSuccessful()) {
                     // 1.5 Fetch and apply Read Watermarks (Crucial for offline catching up)
@@ -166,7 +145,7 @@ public class ChatViewModel extends AndroidViewModel {
 
                         // For messages that DO already exist, safely update their sequenceId and status
                         for (com.masterapp.chat.local.entity.MessageEntity msg : serverMessages) {
-                            dao.safeUpsertFromServer(msg.msgUuid, msg.sequenceId, msg.status, msg.sentAt, msg.readAt);
+                            dao.safeUpsertFromServer(msg.msgUuid, msg.sequenceId, msg.status, msg.sentAt, msg.readAt, msg.deliveredAt);
                         }
 
                         // Advance checkpoint to highest received sequenceId
@@ -177,7 +156,7 @@ public class ChatViewModel extends AndroidViewModel {
                             }
                         }
                         if (maxSeq > 0) {
-                            checkpointDao.updatePulledSeq(conversationId, maxSeq, System.currentTimeMillis());
+                            checkpointDao.updatePulledCheckpoint(conversationId, maxSeq, System.currentTimeMillis(), System.currentTimeMillis());
 
                             // Two-phase delivery ack: tell server we successfully persisted these messages
                             try {
@@ -193,44 +172,65 @@ public class ChatViewModel extends AndroidViewModel {
             } catch (Exception e) {
                 Log.e(TAG, "Pull Sync Error: " + e.getMessage());
             }
+
+            // --- APPEND DELTA: Trigger Incremental Updates ---
+            android.content.SharedPreferences prefs = getApplication().getSharedPreferences("ChatPrefs", android.content.Context.MODE_PRIVATE);
+            long lastSyncTime = prefs.getLong("lastSyncTime", 0);
+            
+            try {
+                retrofit2.Response<com.masterapp.chat.models.IncrementalPullResponse> pullResponse = com.masterapp.chat.api.ApiClient.getMessageApi()
+                        .getIncrementalUpdates(lastSyncTime, 200)
+                        .execute();
+                        
+                if (pullResponse.isSuccessful() && pullResponse.body() != null) {
+                    List<com.masterapp.chat.local.entity.MessageEntity> updatedMessages = pullResponse.body().getData();
+                    if (updatedMessages != null && !updatedMessages.isEmpty()) {
+                        dao.insertOrReplaceAll(updatedMessages);
+                        long maxUpdatedAt = lastSyncTime;
+                        
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US);
+                        sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                        
+                        for (com.masterapp.chat.local.entity.MessageEntity m : updatedMessages) {
+                            if (m.updatedAt != null) {
+                                try {
+                                    java.util.Date date = sdf.parse(m.updatedAt);
+                                    if (date != null && date.getTime() > maxUpdatedAt) {
+                                        maxUpdatedAt = date.getTime();
+                                    }
+                                } catch (Exception ignored) {
+                                    // Try alternate format
+                                    try {
+                                        java.text.SimpleDateFormat sdfAlt = new java.text.SimpleDateFormat(
+                                                "yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US);
+                                        sdfAlt.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                                        java.util.Date dateAlt = sdfAlt.parse(m.updatedAt);
+                                        if (dateAlt != null && dateAlt.getTime() > maxUpdatedAt) {
+                                            maxUpdatedAt = dateAlt.getTime();
+                                        }
+                                    } catch (Exception ignored2) {}
+                                }
+                            }
+                        }
+                        prefs.edit().putLong("lastSyncTime", maxUpdatedAt).apply();
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Incremental Updates Sync Error", e);
+            }
         }).start();
     }
 
     /**
      * Send a Message: Offline-First Approach
      */
-    public void sendMessage(String text) {
+    public void sendMessage(String text, String receiverId) {
         if (conversationId == null || text == null || text.trim().isEmpty()) return;
 
-        // 1. Generate unique idempotency key
-        String msgUuid = java.util.UUID.randomUUID().toString();
-
-        // 2. Construct Entity
-        com.masterapp.chat.local.entity.MessageEntity newMessage = new com.masterapp.chat.local.entity.MessageEntity(
-                msgUuid,
-                conversationId,
-                text.trim(),
-                myUserId,
-                null, // sequenceId is NULL until server confirms
-                "PENDING",
-                System.currentTimeMillis(),
-                null, // sentAt
-                null  // readAt
-        );
-
-        // 3. Write locally instantly (UI updates automatically via LiveData)
-        new Thread(() -> {
-            dao.insertOrReplace(newMessage);
-
-            // 4. Trigger background SyncWorker
-            androidx.work.OneTimeWorkRequest syncRequest = new androidx.work.OneTimeWorkRequest.Builder(com.masterapp.chat.sync.SyncWorker.class)
-                    .setConstraints(new androidx.work.Constraints.Builder()
-                            .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
-                            .build())
-                    .build();
-
-            androidx.work.WorkManager.getInstance(getApplication()).enqueue(syncRequest);
-        }).start();
+        // Delegate entire complex offline-first logic cleanly to Repository.
+        // It injects locally securely, queues the sync Outbox, and handles WorkManager native scheduling securely.
+        messageRepository.sendMessage(conversationId, myUserId, receiverId, text.trim());
     }
 
     /**
@@ -287,6 +287,7 @@ public class ChatViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+        isPolling = false;
         // Remove stable observers
         SocketManager.getInstance().getNewMessageEvents().removeObserver(newMessageObserver);
         SocketManager.getInstance().getMessageReadEvents().removeObserver(messageReadObserver);
@@ -295,5 +296,11 @@ public class ChatViewModel extends AndroidViewModel {
         // Remove raw listeners
         socketManager.off("typing_start");
         socketManager.off("typing_stop");
+    }
+
+    private String formatIso8601(long millis) {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US);
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+        return sdf.format(new java.util.Date(millis));
     }
 }

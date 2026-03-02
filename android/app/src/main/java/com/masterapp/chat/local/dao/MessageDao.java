@@ -21,6 +21,10 @@ public interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOrReplaceAll(List<MessageEntity> messages);
 
+    // Delete all messages (used for cache recovery reset)
+    @Query("DELETE FROM messages")
+    void deleteAll();
+
     // Insert only if the message doesn't already exist (safe for batch pulls)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertIfAbsent(MessageEntity message);
@@ -38,6 +42,7 @@ public interface MessageDao {
            "sequenceId = :sequenceId, " +
            "sentAt = :sentAt, " +
            "readAt = :readAt, " +
+           "deliveredAt = :deliveredAt, " +
            "status = CASE " +
            "  WHEN status = 'read' THEN 'read' " +
            "  WHEN status = 'delivered' AND :newStatus IN ('sent', 'PENDING') THEN 'delivered' " +
@@ -45,10 +50,9 @@ public interface MessageDao {
            "  ELSE :newStatus " +
            "END " +
            "WHERE msgUuid = :msgUuid")
-    void safeUpsertFromServer(String msgUuid, Long sequenceId, String newStatus, String sentAt, String readAt);
+    void safeUpsertFromServer(String msgUuid, Long sequenceId, String newStatus, String sentAt, String readAt, String deliveredAt);
 
-    // Get all messages for a conversation, perfectly ordered by sequence ID, falling back to local timestamp for pending
-    @Query("SELECT * FROM messages WHERE conversationId = :convId ORDER BY COALESCE(sequenceId, 999999999) ASC, localTimestamp ASC")
+    @Query("SELECT * FROM messages WHERE conversationId = :convId ORDER BY COALESCE(sequenceId, 999999999) DESC, localTimestamp DESC")
     LiveData<List<MessageEntity>> getMessagesForConversation(String convId);
 
     // Get strictly the highest known sequence ID for this conversation to use in sync pulls
@@ -75,9 +79,12 @@ public interface MessageDao {
     @Query("UPDATE messages SET status = 'read' WHERE msgUuid IN (:msgUuids)")
     void markMessagesAsReadLocal(List<String> msgUuids);
 
-    @Query("UPDATE messages SET status = :status, readAt = :readAt " +
+    @Query("UPDATE messages SET " +
+           "status = :status, " +
+           "readAt = CASE WHEN :status = 'read' AND readAt IS NULL THEN :timeStr ELSE readAt END, " +
+           "deliveredAt = CASE WHEN :status IN ('read', 'delivered') AND deliveredAt IS NULL THEN :timeStr ELSE deliveredAt END " +
            "WHERE conversationId = :convId AND sequenceId <= :maxSeq AND senderId = :myUserId AND status != 'read'")
-    void updateOtherUserReadWatermark(String convId, long maxSeq, String status, String readAt, String myUserId);
+    void updateOtherUserReadWatermark(String convId, long maxSeq, String status, String timeStr, String myUserId);
 
     @Query("UPDATE messages SET status = 'read', readAt = :readAt " +
            "WHERE conversationId = :convId AND sequenceId <= :maxSeq AND senderId != :myUserId AND status != 'read'")
@@ -90,4 +97,22 @@ public interface MessageDao {
     // Delete all messages for a specific conversation
     @Query("DELETE FROM messages WHERE conversationId = :convId")
     void deleteMessagesByConversation(String convId);
+
+    // Get a specific message by its UUID
+    @Query("SELECT * FROM messages WHERE msgUuid = :msgUuid LIMIT 1")
+    MessageEntity getMessageByUuid(String msgUuid);
+
+    // Update message status only (for dead-letter queue FAILED marking and retry reset)
+    @Query("UPDATE messages SET status = :status WHERE msgUuid = :msgUuid")
+    void updateMessageStatus(String msgUuid, String status);
+
+    // Get all message UUIDs that are in FAILED status (dead-lettered)
+    @Query("SELECT msgUuid FROM messages WHERE status = 'FAILED'")
+    List<String> getFailedMessageUuids();
+    // Delete a specific message by its UUID
+    @Query("DELETE FROM messages WHERE msgUuid = :msgUuid")
+    void deleteByUuid(String msgUuid);
+    // Delete local messages that are not in the provided server UUID list
+    @Query("DELETE FROM messages WHERE conversationId = :convId AND msgUuid NOT IN (:serverUuids)")
+    void deleteOrphanedMessages(String convId, List<String> serverUuids);
 }

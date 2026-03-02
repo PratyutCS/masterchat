@@ -40,6 +40,9 @@ public class SocketManager {
     private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> newMessageEvents = new androidx.lifecycle.MutableLiveData<>();
     private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> messageReadEvents = new androidx.lifecycle.MutableLiveData<>();
     private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> messageDeliveredEvents = new androidx.lifecycle.MutableLiveData<>();
+    private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> conversationDeletedEvents = new androidx.lifecycle.MutableLiveData<>();
+    private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> globalSyncEvents = new androidx.lifecycle.MutableLiveData<>();
+    private final androidx.lifecycle.MutableLiveData<org.json.JSONObject> messageDeletedFromAdminEvents = new androidx.lifecycle.MutableLiveData<>();
 
     private SocketManager() {
         // Private constructor
@@ -55,6 +58,9 @@ public class SocketManager {
     public androidx.lifecycle.LiveData<org.json.JSONObject> getNewMessageEvents() { return newMessageEvents; }
     public androidx.lifecycle.LiveData<org.json.JSONObject> getMessageReadEvents() { return messageReadEvents; }
     public androidx.lifecycle.LiveData<org.json.JSONObject> getMessageDeliveredEvents() { return messageDeliveredEvents; }
+    public androidx.lifecycle.LiveData<org.json.JSONObject> getConversationDeletedEvents() { return conversationDeletedEvents; }
+    public androidx.lifecycle.LiveData<org.json.JSONObject> getGlobalSyncEvents() { return globalSyncEvents; }
+    public androidx.lifecycle.LiveData<org.json.JSONObject> getMessageDeletedFromAdminEvents() { return messageDeletedFromAdminEvents; }
 
 
     /**
@@ -105,6 +111,24 @@ public class SocketManager {
                 }
             });
 
+            socket.on("conversation_deleted", args -> {
+                if (args.length > 0 && args[0] instanceof org.json.JSONObject) {
+                    conversationDeletedEvents.postValue((org.json.JSONObject) args[0]);
+                }
+            });
+
+            socket.on("global_sync_required", args -> {
+                if (args.length > 0 && args[0] instanceof org.json.JSONObject) {
+                    globalSyncEvents.postValue((org.json.JSONObject) args[0]);
+                }
+            });
+
+            socket.on("message_deleted_from_admin", args -> {
+                if (args.length > 0 && args[0] instanceof org.json.JSONObject) {
+                    messageDeletedFromAdminEvents.postValue((org.json.JSONObject) args[0]);
+                }
+            });
+
             socket.on(Socket.EVENT_DISCONNECT, args -> {
                 Log.d(TAG, "Socket disconnected");
             });
@@ -137,8 +161,12 @@ public class SocketManager {
         try {
             JSONObject data = new JSONObject();
             data.put("token", token);
-            socket.emit("authenticate", data);
-            Log.d(TAG, "Sent authenticate event");
+            if (socket != null) {
+                socket.emit("authenticate", data);
+                Log.d(TAG, "Sent authenticate event");
+            } else {
+                Log.w(TAG, "Socket is null, cannot authenticate");
+            }
         } catch (JSONException e) {
             Log.e(TAG, "Auth JSON error: " + e.getMessage());
         }
